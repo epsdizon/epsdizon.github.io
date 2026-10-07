@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="tl" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: Fredoka; font-weight: 500; src: url(assets/fonts/fredoka-latin-500-normal.woff2) format("woff2"); font-display: block; }
+      @font-face { font-family: Fredoka; font-weight: 600; src: url(assets/fonts/fredoka-latin-600-normal.woff2) format("woff2"); font-display: block; }
+      @font-face { font-family: Fredoka; font-weight: 700; src: url(assets/fonts/fredoka-latin-700-normal.woff2) format("woff2"); font-display: block; }
+      @font-face { font-family: Pacifico; font-weight: 400; src: url(assets/fonts/pacifico-latin-400-normal.woff2) format("woff2"); font-display: block; }
+      :root {
+        --blue: #4a8fdb;
+        --blue-deep: #2f6fbf;
+        --navy: #0e3a6e;
+        --cream: #e7e7dd;
+        --sun: #ffc93c;
+        --white: #ffffff;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1080px; height: 1920px; overflow: hidden;
+        background: var(--navy);
+      }
+      #root {
+        position: relative; width: 100%; height: 100%;
+        font-family: Fredoka, ui-rounded, system-ui, sans-serif;
+        color: var(--white);
+      }
+      .clip { position: absolute; inset: 0; overflow: hidden; }
+      .scene { display: flex; flex-direction: column; align-items: center; }
+      .headline {
+        position: absolute; left: 60px; right: 60px; text-align: center;
+        font-weight: 700; font-size: 104px; line-height: 1.08; letter-spacing: -0.01em;
+      }
+      .headline .ln { display: block; }
+      .sub { font-weight: 600; font-size: 64px; }
+      .script { font-family: Pacifico, cursive; font-weight: 400; }
+      .accent { color: var(--sun); }
+      .art { position: absolute; left: 90px; width: 900px; height: 900px; }
+      svg { overflow: visible; }
+
+      #bg-bubbles { z-index: 50; pointer-events: none; }
+      .bubble {
+        position: absolute; border-radius: 50%;
+        border: 4px solid rgba(255,255,255,0.55);
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.55), rgba(255,255,255,0.05) 60%);
+      }
+
+      /* Scene backgrounds */
+      #s1 { background: linear-gradient(180deg, #3d4a63 0%, #232c3d 100%); }
+      #s2 { background: linear-gradient(180deg, #2b3446 0%, #171d29 100%); }
+      #s3 { background: var(--blue); }
+      #s4 { background: linear-gradient(180deg, #5aa0e8 0%, #2f6fbf 100%); }
+      #s5 { background: linear-gradient(180deg, #ffd98a 0%, #ffb470 55%, #ff9a6b 100%); }
+      #s6 { background: linear-gradient(180deg, #fff3e3 0%, #ffe2c4 100%); }
+      #s7 { background: linear-gradient(180deg, #5aa0e8 0%, #2f6fbf 100%); }
+      #s8 { background: var(--cream); color: var(--navy); }
+
+      .logo-card {
+        position: absolute; width: 640px; height: 640px; left: 220px;
+        border-radius: 80px; background: rgb(231,231,221); overflow: hidden;
+        box-shadow: 0 40px 80px rgba(0,0,0,0.25);
+      }
+      .logo-card img { width: 100%; height: 100%; display: block; }
+
+      .pill {
+        display: inline-flex; align-items: center; gap: 24px;
+        padding: 26px 48px; border-radius: 999px;
+        font-weight: 700; font-size: 56px;
+      }
+      .steps { position: absolute; top: 1420px; left: 0; right: 0; display: flex; justify-content: center; gap: 36px; }
+      .step {
+        width: 280px; padding: 30px 0; border-radius: 40px; text-align: center;
+        background: var(--white); color: var(--navy); font-weight: 700; font-size: 64px;
+        box-shadow: 0 16px 0 rgba(14,58,110,0.35);
+      }
+      .step .chk { display: block; color: #22a06b; font-size: 56px; line-height: 1; margin-bottom: 8px; }
+
+      .save-row {
+        position: absolute; left: 90px; right: 90px; height: 300px;
+        display: flex; align-items: center; gap: 48px;
+        background: var(--white); border-radius: 60px; padding: 0 56px;
+        box-shadow: 0 24px 50px rgba(160,90,40,0.18);
+        color: var(--navy); font-weight: 700; font-size: 84px; white-space: nowrap;
+      }
+      .save-row svg { flex: none; }
+      .badge {
+        position: absolute; left: 140px; right: 140px; top: 1340px;
+        background: var(--blue); color: var(--white); text-align: center;
+        border-radius: 60px; padding: 44px 0; font-weight: 700; font-size: 84px;
+        box-shadow: 0 18px 0 var(--navy);
+      }
+      .fb-pill { background: #1877f2; color: #fff; }
+      .fb-pill .f {
+        width: 84px; height: 84px; border-radius: 50%; background: #fff; color: #1877f2;
+        display: grid; place-items: center; font-family: Arial, sans-serif; font-weight: 900; font-size: 70px;
+        padding-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="44" data-width="1080" data-height="1920">
+
+      <!-- S1: Hook — tired with laundry pile -->
+      <section id="s1" class="clip scene" data-start="0" data-duration="5.5" data-track-index="0">
+        <h1 class="headline" style="top: 200px">
+          <span class="ln">Pagod ka na ba</span>
+          <span class="ln">sa <span class="accent">labahin?</span></span>
+        </h1>
+        <div class="art" style="top: 760px">
+          <svg viewBox="0 0 900 900" width="900" height="900">
+            <ellipse cx="450" cy="840" rx="400" ry="40" fill="rgba(0,0,0,0.25)" />
+            <g id="pile"></g>
+            <g transform="translate(250 830) scale(1.5)"><g id="tired"></g></g>
+            <path id="sweat" d="M290 450 q-16 26 0 36 q16 -10 0 -36z" fill="#9fd3ff" />
+          </svg>
+        </div>
+      </section>
+
+      <!-- S2: Time wasted -->
+      <section id="s2" class="clip scene" data-start="5.5" data-duration="5" data-track-index="0">
+        <h1 class="headline" style="top: 220px">
+          <span class="ln" id="s2a">Isang buong araw…</span>
+        </h1>
+        <div class="art" style="top: 560px">
+          <svg viewBox="0 0 900 900" width="900" height="900">
+            <circle cx="450" cy="450" r="330" fill="#fff" stroke="#ff7b6b" stroke-width="34" />
+            <g id="ticks"></g>
+            <rect id="hrHand" x="438" y="270" width="24" height="190" rx="12" fill="#0e3a6e" />
+            <rect id="minHand" x="442" y="170" width="16" height="290" rx="8" fill="#ff7b6b" />
+            <circle cx="450" cy="450" r="26" fill="#0e3a6e" />
+          </svg>
+        </div>
+        <h1 class="headline" style="top: 1500px">
+          <span class="ln sub" id="s2b" style="font-size: 76px">nauubos lang sa <span class="accent">paglalaba.</span></span>
+        </h1>
+      </section>
+
+      <!-- S3: Brand reveal -->
+      <section id="s3" class="clip scene" data-start="10.5" data-duration="5" data-track-index="0">
+        <h1 class="headline" style="top: 300px">
+          <span class="ln" id="s3a">Dalhin mo na sa</span>
+        </h1>
+        <div class="logo-card" id="s3logo" style="top: 600px"><img src="assets/logo.jpg" alt="The Spot Laundry Shop" /></div>
+        <h1 class="headline script" style="top: 1350px; font-size: 120px">
+          <span class="ln" id="s3b">The Spot!</span>
+        </h1>
+      </section>
+
+      <!-- S4: We handle it — wash, dry, fold -->
+      <section id="s4" class="clip scene" data-start="15.5" data-duration="6" data-track-index="0">
+        <h1 class="headline" style="top: 180px">
+          <span class="ln" id="s4a">Kami na ang <span class="accent">bahala!</span></span>
+        </h1>
+        <div class="art" style="top: 430px; height: 900px">
+          <svg viewBox="0 0 900 900" width="900" height="900">
+            <rect x="170" y="60" width="560" height="760" rx="56" fill="#fff" />
+            <rect x="170" y="60" width="560" height="140" rx="56" fill="#dfe9f6" />
+            <rect x="170" y="150" width="560" height="50" fill="#dfe9f6" />
+            <circle cx="260" cy="130" r="26" fill="#4a8fdb" />
+            <circle cx="340" cy="130" r="26" fill="#ffc93c" />
+            <rect x="470" y="105" width="190" height="50" rx="14" fill="#0e3a6e" />
+            <circle cx="450" cy="490" r="220" fill="#c9d6e6" />
+            <circle cx="450" cy="490" r="185" fill="#7fb6ef" />
+            <clipPath id="drumClip"><circle cx="450" cy="490" r="185" /></clipPath>
+            <g clip-path="url(#drumClip)">
+              <rect id="water" x="250" y="520" width="400" height="200" fill="#4a8fdb" />
+              <g id="drum">
+                <path d="M370 420 l40 -30 h40 l40 30 l-25 25 l-15 -12 v75 h-80 v-75 l-15 12z" fill="#ff7b6b" />
+                <path d="M470 560 h70 l10 80 h-30 l-15 -55 l-15 55 h-30z" fill="#ffc93c" />
+                <rect x="320" y="540" width="80" height="50" rx="12" fill="#fff" />
+                <circle cx="540" cy="430" r="34" fill="#9be3b2" />
+              </g>
+            </g>
+            <circle cx="450" cy="490" r="185" fill="none" stroke="#fff" stroke-width="10" opacity="0.6" />
+            <path d="M330 400 q40 -60 110 -70" stroke="#fff" stroke-width="16" stroke-linecap="round" fill="none" opacity="0.7" />
+          </svg>
+        </div>
+        <div class="steps">
+          <div class="step"><span class="chk">✓</span>LABA</div>
+          <div class="step"><span class="chk">✓</span>TUYO</div>
+          <div class="step"><span class="chk">✓</span>TUPI</div>
+        </div>
+      </section>
+
+      <!-- S5: Relaxing in a hammock -->
+      <section id="s5" class="clip scene" data-start="21.5" data-duration="5.5" data-track-index="0">
+        <h1 class="headline" style="top: 170px; color: var(--navy)">
+          <span class="ln sub" id="s5a">Habang naglalaba kami…</span>
+          <span class="ln" id="s5b" style="color:#7a1f3d">ikaw, relax lang!</span>
+        </h1>
+        <div class="art" style="top: 760px">
+          <svg viewBox="0 0 900 900" width="900" height="900">
+            <circle id="sun" cx="740" cy="40" r="80" fill="#fff4c2" />
+            <rect x="0" y="760" width="900" height="200" rx="40" fill="#7cc576" />
+            <g id="palmL">
+              <path d="M90 780 q-20 -260 20 -500" stroke="#8a5a3b" stroke-width="44" fill="none" stroke-linecap="round" />
+              <g transform="translate(110 280)" fill="#3fa65a">
+                <ellipse rx="150" ry="36" transform="rotate(-20) translate(110 0)" />
+                <ellipse rx="150" ry="36" transform="rotate(200) translate(110 0)" />
+                <ellipse rx="130" ry="32" transform="rotate(-70) translate(90 0)" />
+                <ellipse rx="130" ry="32" transform="rotate(30) translate(100 0)" />
+                <ellipse rx="130" ry="32" transform="rotate(150) translate(100 0)" />
+              </g>
+            </g>
+            <g id="palmR">
+              <path d="M810 780 q20 -260 -20 -500" stroke="#8a5a3b" stroke-width="44" fill="none" stroke-linecap="round" />
+              <g transform="translate(790 280)" fill="#3fa65a">
+                <ellipse rx="150" ry="36" transform="rotate(-20) translate(110 0)" />
+                <ellipse rx="150" ry="36" transform="rotate(200) translate(110 0)" />
+                <ellipse rx="130" ry="32" transform="rotate(-110) translate(90 0)" />
+                <ellipse rx="130" ry="32" transform="rotate(30) translate(100 0)" />
+                <ellipse rx="130" ry="32" transform="rotate(150) translate(100 0)" />
+              </g>
+            </g>
+            <g id="hammock">
+              <path d="M120 360 Q450 640 780 360" stroke="#fff" stroke-width="10" fill="none" />
+              <!-- person lying -->
+              <g transform="translate(0 -55)">
+              <ellipse cx="610" cy="470" rx="125" ry="30" fill="#2f4f8f" transform="rotate(-14 610 470)" />
+              <circle cx="735" cy="430" r="20" fill="#c98b5e" />
+              <ellipse cx="420" cy="480" rx="140" ry="50" fill="#ffc93c" />
+              <circle cx="255" cy="420" r="50" fill="#c98b5e" />
+              <path d="M205 418 a50 50 0 0 1 96 -22 q-40 -6 -60 12 q-20 -6 -36 10z" fill="#2b1d16" />
+              <path d="M240 428 q10 8 20 0" stroke="#2b1d16" stroke-width="5" fill="none" stroke-linecap="round" />
+              <path d="M272 422 q10 8 20 0" stroke="#2b1d16" stroke-width="5" fill="none" stroke-linecap="round" />
+              <path d="M255 446 q14 10 28 0" stroke="#2b1d16" stroke-width="5" fill="none" stroke-linecap="round" />
+              </g>
+              <!-- front fabric -->
+              <path d="M120 360 Q450 660 780 360 Q450 540 120 360z" fill="#4a8fdb" />
+              <path d="M120 360 Q450 660 780 360" stroke="#2f6fbf" stroke-width="10" fill="none" />
+            </g>
+            <g font-family="Fredoka, sans-serif" font-weight="700" fill="#0e3a6e">
+              <text id="z1" x="320" y="320" font-size="56">z</text>
+              <text id="z2" x="360" y="260" font-size="72">z</text>
+              <text id="z3" x="410" y="190" font-size="92">Z</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- S6: Relaxing on the sofa -->
+      <section id="s6" class="clip scene" data-start="27" data-duration="5" data-track-index="0">
+        <h1 class="headline" style="top: 200px; color: var(--navy)">
+          <span class="ln" id="s6a">Mag-kape.</span>
+          <span class="ln" id="s6b">Mag-cellphone.</span>
+          <span class="ln" id="s6c" style="color: var(--blue-deep)">Mag-bonding!</span>
+        </h1>
+        <div class="art" style="top: 860px">
+          <svg viewBox="0 0 900 900" width="900" height="900">
+            <ellipse cx="450" cy="830" rx="420" ry="34" fill="rgba(160,90,40,0.18)" />
+            <rect x="40" y="300" width="820" height="320" rx="70" fill="#e76f51" />
+            <g id="sofaPeople"></g>
+            <rect x="0" y="520" width="900" height="200" rx="60" fill="#f08a6e" />
+            <rect x="0" y="420" width="110" height="320" rx="55" fill="#d65f43" />
+            <rect x="790" y="420" width="110" height="320" rx="55" fill="#d65f43" />
+            <rect x="90" y="720" width="40" height="90" rx="12" fill="#8a5a3b" />
+            <rect x="770" y="720" width="40" height="90" rx="12" fill="#8a5a3b" />
+            <g id="steam" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" opacity="0.9">
+              <path d="M240 250 q-18 -30 0 -60 q18 -30 0 -60" />
+              <path d="M276 250 q-18 -30 0 -60 q18 -30 0 -60" />
+            </g>
+            <g id="hearts" fill="#ff5d7a">
+              <path transform="translate(640 160)" d="M0 12 C0 -6 24 -6 24 12 C24 -6 48 -6 48 12 C48 32 24 44 24 52 C24 44 0 32 0 12z" />
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <!-- S7: Save time, save money -->
+      <section id="s7" class="clip scene" data-start="32" data-duration="5" data-track-index="0">
+        <h1 class="headline" style="top: 220px; color: var(--navy)">
+          <span class="ln" id="s7t">Sa The Spot…</span>
+        </h1>
+        <div class="save-row" id="save1" style="top: 560px">
+          <svg viewBox="0 0 200 200" width="200" height="200">
+            <circle cx="100" cy="100" r="88" fill="#dfe9f6" stroke="#4a8fdb" stroke-width="14" />
+            <rect x="94" y="40" width="12" height="66" rx="6" fill="#0e3a6e" />
+            <rect x="94" y="94" width="50" height="12" rx="6" fill="#0e3a6e" />
+          </svg>
+          <span>Tipid sa <span style="color: var(--blue)">oras.</span></span>
+        </div>
+        <div class="save-row" id="save2" style="top: 920px">
+          <svg viewBox="0 0 200 200" width="200" height="200">
+            <circle cx="100" cy="100" r="88" fill="#ffc93c" stroke="#e8a317" stroke-width="14" />
+            <text x="100" y="138" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="110" fill="#8a5a00">₱</text>
+          </svg>
+          <span>Tipid sa <span style="color: #e8a317">bulsa.</span></span>
+        </div>
+        <div class="badge" id="badge">Abot-kayang presyo!</div>
+      </section>
+
+      <!-- S8: End card -->
+      <section id="s8" class="clip scene" data-start="37" data-duration="7" data-track-index="0">
+        <div class="logo-card" id="s8logo" style="top: 220px; box-shadow: none"><img src="assets/logo.jpg" alt="The Spot Laundry Shop" /></div>
+        <h1 class="headline script" style="top: 920px; font-size: 104px; color: var(--blue-deep)">
+          <span class="ln" id="s8a">Tara na sa The Spot!</span>
+        </h1>
+        <h2 class="headline sub" style="top: 1130px; color: var(--navy)">
+          <span class="ln" id="s8b">Laba ka na, pahinga ka pa.</span>
+        </h2>
+        <div style="position:absolute; top: 1390px; left: 0; right: 0; text-align: center" id="s8fb">
+          <div class="pill fb-pill"><span class="f">f</span>The Spot Laundry Shop</div>
+          <div class="sub" style="margin-top: 34px; font-size: 48px; color: var(--navy)">I-message kami sa Facebook!</div>
+        </div>
+      </section>
+
+      <!-- Persistent floating bubbles -->
+      <div id="bg-bubbles" class="clip" data-layout-allow-overflow data-start="0" data-duration="44" data-track-index="1"></div>
+    </div>
+
+    <script>
+      // ---------- Deterministic builders ----------
+      function person(o) {
+        const s = o.skin, sh = o.shirt, p = o.pants, h = o.hair;
+        const face = o.mood === "tired"
+          ? '<path d="M-26 -206 h18 M8 -206 h18" stroke="#2b1d16" stroke-width="6" stroke-linecap="round"/>' +
+            '<path d="M-14 -172 q14 -10 28 0" stroke="#2b1d16" stroke-width="6" fill="none" stroke-linecap="round"/>'
+          : '<circle cx="-17" cy="-205" r="6" fill="#2b1d16"/><circle cx="17" cy="-205" r="6" fill="#2b1d16"/>' +
+            '<path d="M-16 -180 q16 14 32 0" stroke="#2b1d16" stroke-width="6" fill="none" stroke-linecap="round"/>';
+        const hairPath = o.long
+          ? `<path d="M-54 -200 a54 54 0 0 1 108 0 v70 h-22 v-60 q-34 -30 -64 -16 v76 h-22z" fill="${h}"/>`
+          : `<path d="M-52 -210 a52 52 0 0 1 104 0 q-30 -22 -52 -12 q-26 -8 -52 12z" fill="${h}"/>`;
+        return `<g transform="translate(${o.x} ${o.y}) ${o.extra || ""}">
+          <rect x="-50" y="-10" width="44" height="${o.legH || 130}" rx="22" fill="${p}"/>
+          <rect x="6" y="-10" width="44" height="${o.legH || 130}" rx="22" fill="${p}"/>
+          <rect x="-62" y="-150" width="124" height="160" rx="54" fill="${sh}"/>
+          <rect x="-12" y="-170" width="24" height="30" fill="${s}"/>
+          <circle cx="0" cy="-205" r="52" fill="${s}"/>
+          ${hairPath}${face}
+          ${o.arms || ""}
+        </g>`;
+      }
+
+      // S1 laundry pile
+      (function () {
+        const cols = ["#ff7b6b", "#ffc93c", "#9be3b2", "#7fb6ef", "#c89cf2", "#ffffff", "#f29bc2", "#4a8fdb"];
+        let out = "";
+        let i = 0;
+        for (let row = 0; row < 6; row++) {
+          const n = 6 - row;
+          for (let k = 0; k < n; k++) {
+            const cx = 610 + (k - (n - 1) / 2) * 82 + ((i * 37) % 23) - 11;
+            const cy = 800 - row * 72;
+            const rot = ((i * 53) % 50) - 25;
+            out += `<rect class="cloth" x="${cx - 60}" y="${cy - 40}" width="120" height="80" rx="34" fill="${cols[i % cols.length]}" transform="rotate(${rot} ${cx} ${cy})" stroke="rgba(0,0,0,0.12)" stroke-width="4"/>`;
+            i++;
+          }
+        }
+        document.getElementById("pile").innerHTML = out;
+        document.getElementById("tired").innerHTML = person({
+          x: 0, y: -130, skin: "#c98b5e", shirt: "#8fa3bf", pants: "#3a4a66", hair: "#2b1d16",
+          mood: "tired", legH: 110,
+          arms: '<rect x="-84" y="-130" width="34" height="130" rx="17" fill="#8fa3bf"/><rect x="50" y="-130" width="34" height="130" rx="17" fill="#8fa3bf"/>',
+          extra: 'rotate(-6)',
+        });
+      })();
+
+      // S2 clock ticks
+      (function () {
+        let t = "";
+        for (let i = 0; i < 12; i++) {
+          t += `<rect x="444" y="140" width="12" height="${i % 3 ? 26 : 48}" rx="6" fill="#0e3a6e" transform="rotate(${i * 30} 450 450)"/>`;
+        }
+        document.getElementById("ticks").innerHTML = t;
+      })();
+
+      // S6 sofa people
+      document.getElementById("sofaPeople").innerHTML =
+        person({
+          x: 260, y: 520, skin: "#e0a97a", shirt: "#4a8fdb", pants: "#2f4f8f", hair: "#3b2418", long: true,
+          arms: '<rect x="-12" y="-120" width="34" height="100" rx="17" fill="#4a8fdb" transform="rotate(-50 0 -120)"/>' +
+                '<rect x="-48" y="-150" width="60" height="70" rx="10" fill="#fff"/><path d="M12 -136 q22 0 22 20 q0 20 -22 20" stroke="#fff" stroke-width="9" fill="none"/>',
+        }) +
+        person({
+          x: 470, y: 520, skin: "#c98b5e", shirt: "#ffc93c", pants: "#3a4a66", hair: "#2b1d16",
+          arms: '<rect x="20" y="-140" width="34" height="110" rx="17" fill="#ffc93c" transform="rotate(30 36 -140)"/>' +
+                '<rect x="-6" y="-252" width="44" height="74" rx="10" fill="#1d2433" transform="rotate(-10 16 -215)"/>',
+        }) +
+        person({
+          x: 670, y: 520, skin: "#d79b6d", shirt: "#9be3b2", pants: "#2f4f8f", hair: "#1c1410", long: true,
+          arms: '<rect x="-90" y="-130" width="34" height="110" rx="17" fill="#9be3b2" transform="rotate(35 -73 -130)"/>',
+        });
+
+      // Floating bubbles (deterministic layout)
+      (function () {
+        const host = document.getElementById("bg-bubbles");
+        for (let i = 0; i < 14; i++) {
+          const b = document.createElement("div");
+          b.className = "bubble";
+          const size = 40 + ((i * 29) % 70);
+          b.style.width = b.style.height = size + "px";
+          b.style.left = ((i * 173) % 1000) + "px";
+          b.style.top = 1960 + ((i * 97) % 300) + "px";
+          host.appendChild(b);
+        }
+      })();
+
+      // ---------- Timeline ----------
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const pop = { opacity: 0, y: 60, scale: 0.9 };
+      const popTo = { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "back.out(1.8)" };
+
+      // S1 (0–5.5)
+      tl.fromTo("#s1 .ln", pop, { ...popTo, stagger: 0.35 }, 0.2);
+      tl.fromTo("#pile .cloth", { opacity: 0, y: -400 }, { opacity: 1, y: 0, duration: 0.5, ease: "bounce.out", stagger: 0.07 }, 0.6);
+      tl.fromTo("#tired", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, 0.4);
+      tl.to("#tired", { rotation: -3, transformOrigin: "50% 100%", duration: 0.8, yoyo: true, repeat: 4, ease: "sine.inOut" }, 1.2);
+      tl.fromTo("#sweat", { opacity: 0, y: 0 }, { opacity: 1, y: 60, duration: 1, ease: "power1.in", repeat: 2, repeatDelay: 0.3 }, 1.5);
+      tl.to("#s1 .art", { scale: 1.06, transformOrigin: "50% 100%", duration: 5, ease: "none" }, 0);
+
+      // S2 (5.5–10.5)
+      tl.fromTo("#s2a", pop, popTo, 5.7);
+      tl.fromTo("#s2 .art", { scale: 0.6, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.6)" }, 5.6);
+      tl.fromTo("#minHand", { rotation: 0 }, { rotation: 360 * 6, svgOrigin: "450 450", duration: 4.6, ease: "power1.inOut" }, 5.8);
+      tl.fromTo("#hrHand", { rotation: 0 }, { rotation: 360 / 2, svgOrigin: "450 450", duration: 4.6, ease: "power1.inOut" }, 5.8);
+      tl.fromTo("#s2b", pop, popTo, 7.4);
+
+      // S3 (10.5–15.5)
+      tl.fromTo("#s3", { clipPath: "circle(0% at 50% 50%)" }, { clipPath: "circle(80% at 50% 50%)", duration: 0.7, ease: "power2.out" }, 10.5);
+      tl.fromTo("#s3a", pop, popTo, 10.9);
+      tl.fromTo("#s3logo", { scale: 0.2, rotation: -12, opacity: 0 }, { scale: 1, rotation: 0, opacity: 1, duration: 0.9, ease: "back.out(1.7)" }, 11.2);
+      tl.fromTo("#s3b", pop, popTo, 12.1);
+      tl.to("#s3logo", { y: -18, duration: 1.2, yoyo: true, repeat: 2, ease: "sine.inOut" }, 12.2);
+
+      // S4 (15.5–21.5)
+      tl.fromTo("#s4a", pop, popTo, 15.7);
+      tl.fromTo("#s4 .art", { y: 200, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 15.6);
+      tl.fromTo("#drum", { rotation: 0 }, { rotation: 360 * 5, svgOrigin: "450 490", duration: 5.6, ease: "power1.inOut" }, 15.9);
+      tl.fromTo("#water", { y: 0 }, { y: -14, duration: 0.4, yoyo: true, repeat: 13, ease: "sine.inOut" }, 15.9);
+      tl.to("#s4 .art", { x: 6, duration: 0.08, yoyo: true, repeat: 40, ease: "none" }, 17.0);
+      tl.fromTo("#s4 .step", { opacity: 0, y: 80, scale: 0.6 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(2)", stagger: 0.5 }, 17.6);
+
+      // S5 (21.5–27)
+      tl.fromTo("#s5", { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.6, ease: "power2.out" }, 21.5);
+      tl.fromTo("#s5a", pop, popTo, 21.8);
+      tl.fromTo("#s5b", pop, popTo, 23.0);
+      tl.fromTo("#hammock", { rotation: -3 }, { rotation: 3, svgOrigin: "450 360", duration: 1.3, yoyo: true, repeat: 3, ease: "sine.inOut" }, 21.5);
+      tl.fromTo("#sun", { scale: 0.9 }, { scale: 1.1, svgOrigin: "740 40", duration: 1.4, yoyo: true, repeat: 3, ease: "sine.inOut" }, 21.5);
+      ["#z1", "#z2", "#z3"].forEach((z, i) => {
+        tl.fromTo(z, { opacity: 0, y: 20 }, { opacity: 1, y: -30, duration: 1.2, repeat: 2, repeatDelay: 0.3, ease: "sine.out" }, 22.4 + i * 0.4);
+      });
+
+      // S6 (27–32)
+      tl.fromTo("#s6 .ln", pop, { ...popTo, stagger: 0.9 }, 27.2);
+      tl.fromTo("#s6 .art", { y: 120, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 27.0);
+      tl.fromTo("#steam path", { opacity: 0, y: 20 }, { opacity: 0.9, y: -20, duration: 1, stagger: 0.3, repeat: 3, ease: "sine.inOut" }, 27.6);
+      tl.fromTo("#hearts path", { opacity: 0, scale: 0.4, y: 0 }, { opacity: 1, scale: 1.2, y: -60, transformOrigin: "50% 50%", duration: 1.1, repeat: 2, repeatDelay: 0.2, ease: "sine.out" }, 29.0);
+
+      // S7 (32–37)
+      tl.fromTo("#s7t", pop, popTo, 32.2);
+      tl.fromTo("#save1", { x: -1100 }, { x: 0, duration: 0.7, ease: "power3.out" }, 32.6);
+      tl.fromTo("#save2", { x: 1100 }, { x: 0, duration: 0.7, ease: "power3.out" }, 33.5);
+      tl.fromTo("#badge", { scale: 0, rotation: -8 }, { scale: 1, rotation: -3, duration: 0.7, ease: "back.out(2.2)" }, 34.6);
+      tl.to("#badge", { scale: 1.06, duration: 0.5, yoyo: true, repeat: 3, ease: "sine.inOut" }, 35.35);
+
+      // S8 (37–44)
+      tl.fromTo("#s8", { clipPath: "circle(0% at 50% 30%)" }, { clipPath: "circle(120% at 50% 30%)", duration: 0.8, ease: "power2.out" }, 37);
+      tl.fromTo("#s8logo", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: "back.out(1.6)" }, 37.3);
+      tl.fromTo("#s8a", pop, popTo, 38.2);
+      tl.fromTo("#s8b", pop, popTo, 38.9);
+      tl.fromTo("#s8fb", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.6)" }, 39.6);
+      tl.to("#s8fb .pill", { scale: 1.05, duration: 0.6, yoyo: true, repeat: 5, ease: "sine.inOut" }, 40.4);
+
+      // Bubbles drift up the whole time
+      document.querySelectorAll("#bg-bubbles .bubble").forEach((b, i) => {
+        const dur = 6 + (i % 5);
+        const start = (i * 0.9) % 6;
+        tl.fromTo(b, { y: 0, x: 0 }, { y: -2400, x: (i % 2 ? 60 : -60), duration: dur, ease: "none", repeat: Math.floor((44 - start) / dur) }, start);
+      });
+
+      tl.set({}, {}, 44);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
