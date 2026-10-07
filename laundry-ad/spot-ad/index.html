@@ -100,7 +100,7 @@
     </style>
   </head>
   <body>
-    <div id="root" data-composition-id="main" data-start="0" data-duration="44" data-width="1080" data-height="1920">
+    <div id="root" data-composition-id="main" data-start="0" data-duration="47" data-width="1080" data-height="1920">
 
       <!-- S1: Hook — tired with laundry pile -->
       <section id="s1" class="clip scene" data-start="0" data-duration="5.5" data-track-index="0">
@@ -286,13 +286,13 @@
             <circle cx="100" cy="100" r="88" fill="#ffc93c" stroke="#e8a317" stroke-width="14" />
             <text x="100" y="138" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="110" fill="#8a5a00">₱</text>
           </svg>
-          <span>Tipid sa <span style="color: #e8a317">bulsa.</span></span>
+          <span>Tipid sa <span style="color: #b06f00">bulsa.</span></span>
         </div>
         <div class="badge" id="badge">Abot-kayang presyo!</div>
       </section>
 
       <!-- S8: End card -->
-      <section id="s8" class="clip scene" data-start="37" data-duration="7" data-track-index="0">
+      <section id="s8" class="clip scene" data-start="37" data-duration="10" data-track-index="0">
         <div class="logo-card" id="s8logo" style="top: 220px; box-shadow: none"><img src="assets/logo.jpg" alt="The Spot Laundry Shop" /></div>
         <h1 class="headline script" style="top: 920px; font-size: 104px; color: var(--blue-deep)">
           <span class="ln" id="s8a">Tara na sa The Spot!</span>
@@ -300,14 +300,18 @@
         <h2 class="headline sub" style="top: 1130px; color: var(--navy)">
           <span class="ln" id="s8b">Laba ka na, pahinga ka pa.</span>
         </h2>
-        <div style="position:absolute; top: 1390px; left: 0; right: 0; text-align: center" id="s8fb">
+        <div id="s8addr" style="position:absolute; top: 1260px; left: 80px; right: 80px; text-align: center; color: var(--navy); font-weight: 600; font-size: 50px; line-height: 1.25">Solib, malapit sa Central School<br/>Floridablanca, Pampanga</div>
+        <div style="position:absolute; top: 1480px; left: 0; right: 0; text-align: center" id="s8fb">
           <div class="pill fb-pill"><span class="f">f</span>The Spot Laundry Shop</div>
           <div class="sub" style="margin-top: 34px; font-size: 48px; color: var(--navy)">I-message kami sa Facebook!</div>
         </div>
       </section>
 
+      <!-- Tagalog voiceover (ElevenLabs, voice: Ate Weng) — rebuilt by build_voiceover.py -->
+      <audio id="vo" src="assets/voiceover.mp3" data-start="0" data-duration="47" data-track-index="2"></audio>
+
       <!-- Persistent floating bubbles -->
-      <div id="bg-bubbles" class="clip" data-layout-allow-overflow data-start="0" data-duration="44" data-track-index="1"></div>
+      <div id="bg-bubbles" class="clip" data-layout-allow-overflow data-start="0" data-duration="47" data-track-index="1"></div>
     </div>
 
     <script>
@@ -461,17 +465,18 @@
       tl.fromTo("#s8logo", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: "back.out(1.6)" }, 37.3);
       tl.fromTo("#s8a", pop, popTo, 38.2);
       tl.fromTo("#s8b", pop, popTo, 38.9);
-      tl.fromTo("#s8fb", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.6)" }, 39.6);
-      tl.to("#s8fb .pill", { scale: 1.05, duration: 0.6, yoyo: true, repeat: 5, ease: "sine.inOut" }, 40.4);
+      tl.fromTo("#s8addr", pop, popTo, 39.6);
+      tl.fromTo("#s8fb", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.7, ease: "back.out(1.6)" }, 40.4);
+      tl.to("#s8fb .pill", { scale: 1.05, duration: 0.6, yoyo: true, repeat: 9, ease: "sine.inOut" }, 41.2);
 
       // Bubbles drift up the whole time
       document.querySelectorAll("#bg-bubbles .bubble").forEach((b, i) => {
         const dur = 6 + (i % 5);
         const start = (i * 0.9) % 6;
-        tl.fromTo(b, { y: 0, x: 0 }, { y: -2400, x: (i % 2 ? 60 : -60), duration: dur, ease: "none", repeat: Math.floor((44 - start) / dur) }, start);
+        tl.fromTo(b, { y: 0, x: 0 }, { y: -2400, x: (i % 2 ? 60 : -60), duration: dur, ease: "none", repeat: Math.floor((47 - start) / dur) }, start);
       });
 
-      tl.set({}, {}, 44);
+      tl.set({}, {}, 47);
       window.__timelines["main"] = tl;
       tl.seek(0);
     </script>

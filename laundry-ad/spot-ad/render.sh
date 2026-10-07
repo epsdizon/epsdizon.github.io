@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 OUT="${1:-../the-spot-ad.mp4}"
 SHEET="${2:-../contact-sheet.png}"
-TIMES=(3 9 13.5 19.5 24.5 30.5 36 41)
+TIMES=(3 9 13.5 19.5 24.5 30.5 36 44)
 
 # Use a pre-installed headless Chromium if present (cloud containers).
 HS=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell
