@@ -9,9 +9,11 @@ Structure (120 BPM, 1 bar = 2 s):
   26-28 s climax stabs, 28 s final D chord ringing out
 
 Usage: python3 make_music.py [out.wav] [--duration 32]
+       python3 make_music.py out.wav --song opening.mp4 --song-at 10   # Roger intro, then your song
 Only needs numpy + scipy.
 """
 import argparse
+import subprocess
 import numpy as np
 from scipy import signal
 from scipy.io import wavfile
@@ -194,7 +196,38 @@ def brass(note, dur, vel=1.0):
 
 
 # ---------------------------------------------------------------- score
-def build(duration):
+def load_song(path, offset=0.0):
+    """Decode any audio/video file to float stereo at SR via ffmpeg."""
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(offset), "-i", path, "-vn", "-ac", "2", "-ar", str(SR),
+                          "-f", "f32le", "-"], check=True, capture_output=True).stdout
+    return np.frombuffer(raw, dtype=np.float32).reshape(-1, 2).astype(float)
+
+
+def mix_song(intro, song, at, target_db=-13.0, intro_gain=0.4):
+    """Hand the intro over to a full song starting at `at` seconds (loudness-matched)."""
+    n, i = len(intro), int(at * SR)
+    rms = np.sqrt(np.mean(song[: 10 * SR] ** 2)) + 1e-9
+    song = song * (10 ** (target_db / 20) / rms)
+    song[: int(0.03 * SR)] *= np.linspace(0, 1, int(0.03 * SR))[:, None]
+    duck = np.ones(n)
+    t = (np.arange(n - i)) / SR
+    duck[i:] = np.where(t < 0.25, 1 - 0.7 * t / 0.25, 0.3 * np.exp(-(t - 0.25) * 1.5))  # let the hit ring under the song
+    out = intro * intro_gain * duck[:, None]
+    seg = song[: n - i]
+    out[i:i + len(seg)] += seg
+    return np.tanh(out * 1.05) / np.tanh(1.05)
+
+
+def master(st):
+    n = len(st)
+    fade_in = int(0.4 * SR)
+    st[:fade_in] *= np.linspace(0, 1, fade_in)[:, None]
+    fo = int(1.6 * SR)
+    st[n - fo:] *= np.linspace(1, 0, fo)[:, None] ** 1.5
+    return st / max(1.0, np.max(np.abs(st)) / 0.97)
+
+
+def build(duration, song=None, song_at=10.0, song_offset=0.0):
     m = Mix(duration)
 
     # --- intro 0-8 s: Dm  Bb  Gm  A, swelling
@@ -222,6 +255,9 @@ def build(duration):
     m.add(rev_cymbal(1.8), 8.2, gain=0.7, send=0.2)
     for st in (9.25, 9.5, 9.625, 9.75, 9.875):  # snare pickup fill
         m.add(snare(), st, gain=0.55, pan=0.05, send=0.15)
+
+    if song is not None:  # Roger intro -> hand over to the supplied opening song
+        return master(mix_song(m.render(), load_song(song, song_offset), song_at))
 
     # --- 10-26 s band, D major. 8 bars of 2 s
     prog = ["D2", "A1", "B1", "G1", "D2", "A1", "G1|A1", "D2"]
@@ -300,21 +336,17 @@ def build(duration):
     m.add(guitar("D3", end) * adsr(int(end * SR), 0, 0.5, 0.6, end * 0.6), 28.0, gain=0.35, pan=-0.4, send=0.3)
     m.add(guitar("D3", end) * adsr(int(end * SR), 0, 0.5, 0.6, end * 0.6), 28.0, gain=0.35, pan=0.4, send=0.3)
 
-    st = m.render()
-    # master fade in/out
-    n = len(st)
-    fade_in = int(0.4 * SR)
-    st[:fade_in] *= np.linspace(0, 1, fade_in)[:, None]
-    fo = int(1.6 * SR)
-    st[n - fo:] *= np.linspace(1, 0, fo)[:, None] ** 1.5
-    return st
+    return master(m.render())
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("out", nargs="?", default="assets/music.wav")
     ap.add_argument("--duration", type=float, default=32.0)
+    ap.add_argument("--song", help="audio/video file of the opening song to cut into after the Roger intro")
+    ap.add_argument("--song-at", type=float, default=10.0, help="video time (s) where the song starts")
+    ap.add_argument("--song-offset", type=float, default=0.0, help="skip this many seconds into the song file")
     a = ap.parse_args()
-    audio = build(a.duration)
+    audio = build(a.duration, a.song, a.song_at, a.song_offset)
     wavfile.write(a.out, SR, (audio * 32767).astype(np.int16))
     print(f"wrote {a.out} ({a.duration:.1f}s)")

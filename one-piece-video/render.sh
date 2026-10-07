@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 # Rebuild "Where is the One Piece?" end to end: music -> HyperFrames render -> deliverables.
+# Usage: ./render.sh                 original synthesized score
+#        ./render.sh opening.mp4     Roger intro, then your copy of the opening song from 10 s
 set -euo pipefail
 cd "$(dirname "$0")"
-python3 make_music.py assets/music.wav --duration 32
+if [ $# -ge 1 ]; then
+  python3 make_music.py assets/music.wav --duration 32 --song "$1" --song-at 10
+else
+  python3 make_music.py assets/music.wav --duration 32
+fi
 npx --yes hyperframes@0.8.140 render -o renders/where-is-the-one-piece.mp4 -q delivery -w 4 --quiet
 ffmpeg -v error -y -i renders/where-is-the-one-piece.mp4 -c:v libx264 -crf 19 -preset slow -pix_fmt yuv420p \
   -c:a copy -movflags +faststart renders/where-is-the-one-piece-1080p.mp4
