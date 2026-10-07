@@ -366,7 +366,9 @@
   // ------------------------------------------------------------ canvases
   var main, ctx, lines, lctx, refl, rctx, bloom, bctx, grain;
   function mk(w, h) { var c = document.createElement("canvas"); c.width = w; c.height = h; return c; }
-  function init(canvas) {
+  var WARP = null; // optional [[videoTime, sceneTime], ...] to retime the story to a soundtrack
+  function init(canvas, warp) {
+    WARP = warp || null;
     main = canvas; ctx = main.getContext("2d");
     lines = mk(W, H); lctx = lines.getContext("2d");
     refl = mk(W / 2, H / 2); rctx = refl.getContext("2d");
@@ -414,7 +416,8 @@
     c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2); c.fill();
   }
 
-  function render(t) {
+  function render(vt) {
+    var t = WARP ? keys(WARP, vt) : vt;
     if (!ctx) return;
     var cam = camAt(t), bgc = keys(BG, t), bok = keys(BOK, t);
     var fade = smooth(t / 0.6) * (1 - smooth((t - 31.0) / 0.95));
@@ -524,7 +527,7 @@
     var vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.35, W / 2, H / 2, H * 1.05);
     vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,0.75)");
     ctx.fillStyle = vg; ctx.fillRect(0, 0, W, H);
-    var fr = Math.round(t * 30), gr = mulberry32(fr + 17);
+    var fr = Math.round(vt * 30), gr = mulberry32(fr + 17);
     ctx.globalCompositeOperation = "overlay"; ctx.globalAlpha = 0.09;
     ctx.save(); ctx.translate(-gr() * 256, -gr() * 256);
     ctx.fillStyle = ctx.createPattern(grain, "repeat"); ctx.fillRect(0, 0, W + 256, H + 256);

@@ -2,9 +2,14 @@
 # Rebuild "Where is the One Piece?" end to end: music -> HyperFrames render -> deliverables.
 # Usage: ./render.sh                 original synthesized score
 #        ./render.sh opening.mp4     Roger intro, then your copy of the opening song from 10 s
+#        ./render.sh --tv intro.mp4  44 s cut synced to the TV intro narration (tv-intro/)
 set -euo pipefail
 cd "$(dirname "$0")"
-if [ $# -ge 1 ]; then
+if [ "${1:-}" = "--tv" ]; then  # ./render.sh --tv tv_intro.mp4  -> 44 s cut timed to the TV narration
+  python3 make_music.py tv-intro/assets/tv-intro-music.wav --duration 44 --tv-intro "$2"
+  (cd tv-intro && npx --yes hyperframes@0.8.140 render -o ../renders/one-piece-tv-intro.mp4 -q delivery -w 4 --quiet)
+  echo "done: renders/one-piece-tv-intro.mp4"; exit 0
+elif [ $# -ge 1 ]; then
   python3 make_music.py assets/music.wav --duration 32 --song "$1" --song-at 10
 else
   python3 make_music.py assets/music.wav --duration 32

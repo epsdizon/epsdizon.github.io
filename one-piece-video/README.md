@@ -23,4 +23,9 @@ Preview/edit: `npx hyperframes preview` · Rebuild: `./render.sh`
 intro (0–10 s) and cuts into your copy of the song exactly when the ships set sail (10 s), loudness-matched.
 The song file is not stored in this repo.
 
+**TV-intro cut (44 s):** `./render.sh --tv path/to/tv_intro.mp4` uses the full TV intro (Roger narration →
+ships → song) as the soundtrack. `tv-intro/index.html` retimes the same light-painting to it: the execution
+flash lands on the crash, the ships sail under the narration, the song starts as the camera flies to the map,
+subtitles follow the narration, and a small snare/timpani roll is layered in leading into the flash.
+
 The music is an original composition written to evoke an anime-opening feel; it does not use the official theme.

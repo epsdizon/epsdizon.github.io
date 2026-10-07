@@ -10,6 +10,7 @@ Structure (120 BPM, 1 bar = 2 s):
 
 Usage: python3 make_music.py [out.wav] [--duration 32]
        python3 make_music.py out.wav --song opening.mp4 --song-at 10   # Roger intro, then your song
+       python3 make_music.py assets/tv-intro-music.wav --duration 44 --tv-intro tv_intro.mp4   # for tv-intro.html
 Only needs numpy + scipy.
 """
 import argparse
@@ -227,6 +228,33 @@ def master(st):
     return st / max(1.0, np.max(np.abs(st)) / 0.97)
 
 
+def tv_intro(path, start, duration, hit=19.2, roll=1.7, sfx_gain=1.0):
+    """Use a supplied TV-intro soundtrack (narration + opening) and polish it with
+    a crescendo snare/timpani roll that lands on the execution flash at `hit`."""
+    src = load_song(path, start)[: int(duration * SR)]
+    src = np.pad(src, ((0, int(duration * SR) - len(src)), (0, 0)))
+    src *= 10 ** (-14 / 20) / (np.sqrt(np.mean(src[: int(30 * SR)] ** 2)) + 1e-9)
+    fx = Mix(duration)
+    hits = np.arange(hit - roll, hit, 1 / 16)
+    for k, st in enumerate(hits):  # little drum roll, pp -> f
+        v = (k / len(hits)) ** 1.6
+        fx.add(snare(0.12) * (0.15 + 0.85 * v), st, gain=0.22 * sfx_gain, pan=0.1, send=0.25)
+        if k % 2 == 0:
+            fx.add(timpani(hz("D2"), 0.5, vel=0.2 + 0.8 * v), st, gain=0.25 * sfx_gain, pan=-0.15, send=0.3)
+    fx.add(taiko(2.5), hit, gain=0.6 * sfx_gain, send=0.4)  # low boom under the crash
+    fx.add(crash(2.5), hit, gain=0.25 * sfx_gain, send=0.3)
+    ln = int(2.4 * SR)  # same reverb tail length Mix.render uses
+    sfx = np.zeros((fx.n, 2))
+    ir_t = np.arange(ln) / SR
+    for ch in range(2):  # render fx without the global normaliser so levels stay relative
+        ir = rng.standard_normal(ln) * np.exp(-6.9 * ir_t / 2.4)
+        ir = lp(ir, 6000); ir /= np.sqrt(np.sum(ir ** 2))
+        wet = signal.fftconvolve(fx.verb[ch], ir)[: fx.n]
+        sfx[:, ch] = (fx.L if ch == 0 else fx.R) + wet
+    out = np.tanh((src + sfx) * 1.05) / np.tanh(1.05)
+    return master(out)
+
+
 def build(duration, song=None, song_at=10.0, song_offset=0.0):
     m = Mix(duration)
 
@@ -346,7 +374,13 @@ if __name__ == "__main__":
     ap.add_argument("--song", help="audio/video file of the opening song to cut into after the Roger intro")
     ap.add_argument("--song-at", type=float, default=10.0, help="video time (s) where the song starts")
     ap.add_argument("--song-offset", type=float, default=0.0, help="skip this many seconds into the song file")
+    ap.add_argument("--tv-intro", help="full TV intro (narration + opening) to use as the soundtrack, polished with a drum roll")
+    ap.add_argument("--tv-start", type=float, default=1.2, help="skip this many seconds into the TV intro file")
+    ap.add_argument("--hit", type=float, default=19.2, help="video time (s) of the execution flash the roll lands on")
     a = ap.parse_args()
-    audio = build(a.duration, a.song, a.song_at, a.song_offset)
+    if a.tv_intro:
+        audio = tv_intro(a.tv_intro, a.tv_start, a.duration, a.hit)
+    else:
+        audio = build(a.duration, a.song, a.song_at, a.song_offset)
     wavfile.write(a.out, SR, (audio * 32767).astype(np.int16))
     print(f"wrote {a.out} ({a.duration:.1f}s)")
