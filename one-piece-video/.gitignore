@@ -3,3 +3,4 @@ snapshots/
 node_modules/
 tv-intro/assets/tv-intro-music.wav
 renders/one-piece-tv-intro.mp4
+__pycache__/
