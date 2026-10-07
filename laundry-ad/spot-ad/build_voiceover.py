@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Split a voiceover take at its pauses and place each line on its scene cue.
 
-Usage: python3 build_voiceover.py <take.mp3> [out.mp3]
+Usage: python3 build_voiceover.py <take.mp3> [out.mp3] [--music <track> [bed.mp3]]
 
 The take must contain one spoken line per cue in CUES, separated by pauses
 (e.g. ElevenLabs <break time="1.5s" />). Output length matches the video.
+With --music, also writes a background-music bed (default assets/music-bed.mp3)
+trimmed to the video, faded at both ends, and ducked under the voiceover.
 """
 import re
 import subprocess
@@ -40,9 +42,31 @@ def speech_segments(path, noise="-40dB", min_gap=0.8):
     return [(max(0.0, a - PAD), b + PAD) for a, b in zip(bounds, stops) if b - a > 0.2]
 
 
+def build_music_bed(music, voiceover, out, level_db=-21, fade_out=2.5):
+    """Trim music to the video, set it well under the voice, and duck it while she speaks."""
+    graph = (
+        f"[0:a]atrim=0:{VIDEO_LEN},asetpts=PTS-STARTPTS,loudnorm=I={level_db + 10}:TP=-2,"
+        f"volume=-10dB,afade=t=in:d=0.6,afade=t=out:st={VIDEO_LEN - fade_out}:d={fade_out}[m];"
+        "[1:a]aformat=channel_layouts=stereo,asplit[vk][vk2];[vk2]anullsink;"
+        "[m][vk]sidechaincompress=threshold=0.03:ratio=6:attack=40:release=450[out]"
+    )
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", music, "-i", voiceover,
+                    "-filter_complex", graph, "-map", "[out]", "-ar", "44100", "-ac", "2",
+                    "-b:a", "192k", "-t", str(VIDEO_LEN), out], check=True)
+    print("wrote", out)
+
+
 def main():
-    src = sys.argv[1]
-    out = sys.argv[2] if len(sys.argv) > 2 else "assets/voiceover.mp3"
+    args = sys.argv[1:]
+    music = bed = None
+    if "--music" in args:
+        i = args.index("--music")
+        music = args[i + 1]
+        rest = args[i + 2:]
+        bed = rest[0] if rest else "assets/music-bed.mp3"
+        args = args[:i]
+    src = args[0]
+    out = args[1] if len(args) > 1 else "assets/voiceover.mp3"
     segs = speech_segments(src)
     if len(segs) != len(CUES):
         sys.exit(f"Found {len(segs)} spoken lines but {len(CUES)} cues; adjust noise/min_gap.")
@@ -61,6 +85,8 @@ def main():
     for i, ((a, b), cue) in enumerate(zip(segs, CUES), 1):
         print(f"line {i}: {b - a:5.2f}s @ {cue:5.2f}s")
     print("wrote", out)
+    if music:
+        build_music_bed(music, out, bed)
 
 
 if __name__ == "__main__":
