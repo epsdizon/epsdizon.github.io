@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eugene Dizon | AI UGC Video Editor</title>
+<meta name="description" content="Short-form video ads for Meta Reels, TikTok and YouTube Shorts: AI UGC, product videos and HyperFrames motion graphics.">
+<meta property="og:title" content="Eugene Dizon | AI UGC Video Editor">
+<meta property="og:description" content="Scroll-stopping short-form ads for Meta, TikTok and YouTube Shorts.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Familjen+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0910; --bg2:#13111C; --card:#17141F; --ink:#F5F3EE; --dim:#A8A3B8; --line:#2A2636;
+  --hot:#FF5B2E; --lime:#D4FF3F; --violet:#8B6CFF;
+  color-scheme: dark;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#0A0910; } }
+:root[data-theme="dark"]{ --bg:#0A0910; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font-family:"Familjen Grotesk",system-ui,sans-serif;font-size:17px;line-height:1.55;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.display{font-family:"Anton",Impact,sans-serif;text-transform:uppercase;letter-spacing:.01em;line-height:.92;font-weight:400}
+
+/* ambient glow */
+.aura{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.aura i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.38}
+.aura i:nth-child(1){width:520px;height:520px;background:var(--hot);top:-180px;left:-140px;animation:drift 18s ease-in-out infinite alternate}
+.aura i:nth-child(2){width:460px;height:460px;background:var(--violet);top:30%;right:-200px;animation:drift 22s ease-in-out infinite alternate-reverse}
+.aura i:nth-child(3){width:380px;height:380px;background:var(--lime);bottom:-200px;left:30%;opacity:.16;animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(80px,60px) scale(1.15)}}
+main,header,footer{position:relative;z-index:1}
+main{overflow-x:clip}
+
+/* nav */
+header{position:sticky;top:0;z-index:20;background:rgba(10,9,16,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-weight:700;text-decoration:none;letter-spacing:.02em}
+.brand b{color:var(--hot)}
+.nav a.pill{font-size:.92rem;font-weight:700;text-decoration:none;background:var(--lime);color:#14120A;padding:9px 16px;border-radius:999px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.wrap.hero{padding:64px 20px 40px}
+@media (max-width:860px){.hero{grid-template-columns:1fr}.wrap.hero{padding-top:36px}}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.85rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
+.eyebrow::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--hot);box-shadow:0 0 0 0 rgba(255,91,46,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 12px rgba(255,91,46,0)}100%{box-shadow:0 0 0 0 rgba(255,91,46,0)}}
+h1{font-size:clamp(3.2rem,9vw,7.2rem);margin:18px 0 22px}
+h1 .grad{background:linear-gradient(90deg,var(--hot),#FFB13D,var(--lime),var(--hot));background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 6s linear infinite}
+@keyframes sheen{to{background-position:300% 0}}
+.lede{font-size:1.15rem;color:var(--dim);max-width:52ch}
+.lede b{color:var(--ink)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:700;text-decoration:none;padding:14px 22px;border-radius:999px;border:2px solid var(--ink);cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.hot{background:var(--hot);border-color:var(--hot);color:#160803}
+.btn.ghost{background:transparent;color:var(--ink)}
+
+/* hero phone stack */
+.stack{position:relative;height:560px}
+@media (max-width:860px){.stack{height:420px;margin-top:10px}}
+.stack .phone{position:absolute;width:224px;top:50%;left:50%;transition:transform .5s}
+.stack .p1{transform:translate(-104%,-46%) rotate(-9deg);z-index:1}
+.stack .p2{transform:translate(-50%,-54%) scale(1.06);z-index:3}
+.stack .p3{transform:translate(6%,-44%) rotate(8deg);z-index:2}
+@media (max-width:860px){.stack .phone{width:170px}
+  .stack .p1{transform:translate(-112%,-46%) rotate(-9deg)} .stack .p3{transform:translate(12%,-44%) rotate(8deg)}}
+.stack:hover .p1{transform:translate(-112%,-46%) rotate(-12deg)}
+.stack:hover .p3{transform:translate(14%,-44%) rotate(11deg)}
+
+/* phone frame */
+.phone{background:#05040A;border-radius:34px;padding:9px;box-shadow:0 0 0 2px #2E2A3A,0 30px 60px rgba(0,0,0,.55),0 0 50px rgba(255,91,46,.18)}
+.phone .scr{position:relative;width:100%;aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:#000}
+.phone video{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+
+/* ticker */
+.ticker{border-block:1px solid var(--line);overflow:hidden;background:var(--bg2);margin:36px 0 0}
+.ticker div{display:flex;gap:36px;white-space:nowrap;padding:16px 0;animation:tick 28s linear infinite;width:max-content}
+.ticker span{font-family:"Anton",sans-serif;font-size:1.6rem;text-transform:uppercase;letter-spacing:.03em}
+.ticker span:nth-child(odd){color:var(--ink)} .ticker span:nth-child(even){color:var(--hot)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* sections */
+section.wrap{padding:84px 20px 20px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:30px}
+h2{font-size:clamp(2.4rem,6vw,4.4rem)}
+h2 em{font-style:normal;color:var(--lime)}
+.sub{color:var(--dim);max-width:60ch}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:inherit;font-size:.9rem;font-weight:700;color:var(--ink);background:transparent;border:2px solid var(--line);padding:8px 16px;border-radius:999px;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px 22px}
+@media (max-width:980px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:640px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px}}
+.item{cursor:pointer;transition:transform .35s}
+.item:hover{transform:translateY(-6px) rotate(-.6deg)}
+.item.hide{display:none}
+.item.wide{grid-column:span 2}
+.item.wide .frame{aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 0 0 2px #2E2A3A,0 30px 60px rgba(0,0,0,.5)}
+.item.wide video{width:100%;height:100%;object-fit:contain;display:block}
+@media (max-width:640px){.item.wide{grid-column:1/-1}}
+.item .phone{width:100%}
+.meta{margin-top:14px}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:6px;background:rgba(212,255,63,.12);color:var(--lime)}
+.tag.spec{background:rgba(139,108,255,.16);color:#BCA9FF}
+.tag.fan{background:rgba(255,91,46,.14);color:#FF9A7A}
+.meta h3{font-size:1.08rem;margin:8px 0 2px;line-height:1.25}
+.meta p{font-size:.88rem;color:var(--dim);line-height:1.4}
+.play{position:absolute;right:12px;bottom:12px;z-index:3;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;transition:transform .2s}
+.item:hover .play{transform:scale(1.12)}
+.frame{position:relative}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:860px){.svc{grid-template-columns:1fr}}
+.svc div{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;position:relative;overflow:hidden;transition:border-color .3s}
+.svc div:hover{border-color:var(--hot)}
+.svc div::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--hot);filter:blur(70px);opacity:0;right:-60px;top:-60px;transition:opacity .4s}
+.svc div:hover::after{opacity:.35}
+.svc b{display:block;font-family:"Anton",sans-serif;font-size:1.9rem;text-transform:uppercase;line-height:1;margin:14px 0 10px}
+.svc .n{font-weight:700;color:var(--hot)}
+.svc p{color:var(--dim)}
+
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;counter-reset:s}
+@media (max-width:860px){.steps{grid-template-columns:1fr}}
+.steps li{list-style:none;counter-increment:s;border-top:3px solid var(--line);padding-top:14px}
+.steps li::before{content:"0" counter(s);font-family:"Anton",sans-serif;font-size:2.6rem;color:var(--lime);display:block;line-height:1}
+.steps b{display:block;margin:8px 0 4px}
+.steps span{color:var(--dim);font-size:.95rem}
+.promise{margin-top:26px;display:flex;gap:16px;align-items:center;background:linear-gradient(90deg,rgba(212,255,63,.12),rgba(212,255,63,0));border-left:4px solid var(--lime);padding:18px 22px;border-radius:0 16px 16px 0}
+
+.tools{display:flex;flex-wrap:wrap;gap:10px}
+.tools span{border:2px solid var(--line);border-radius:999px;padding:10px 18px;font-weight:700}
+
+.final{text-align:center;padding:110px 0 70px}
+.final h2{font-size:clamp(2.8rem,8vw,6rem);margin-bottom:18px}
+.final .cta{justify-content:center}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--dim);font-size:.88rem}
+
+/* reveal on scroll */
+.rv{transform:translateY(28px);transition:transform .7s}
+.rv.in{opacity:1;transform:none}
+
+/* lightbox */
+dialog{border:0;padding:0;background:transparent;max-width:none;max-height:none;margin:auto}
+dialog::backdrop{background:rgba(5,4,10,.88);backdrop-filter:blur(8px)}
+.lb{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px}
+.lb video{max-height:82vh;max-width:92vw;border-radius:22px;background:#000;box-shadow:0 0 80px rgba(255,91,46,.25)}
+.lb p{color:var(--ink);font-weight:700;text-align:center;max-width:90vw}
+.close{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));right:16px;width:48px;height:48px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);font-size:1.6rem;cursor:pointer}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .rv{transform:none}
+}
+</style>
+</head>
+<body>
+<div class="aura" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header><div class="wrap nav">
+  <a class="brand" href="#">EUGENE <b>DIZON</b></a>
+  <a class="pill" href="mailto:epsdizon@gmail.com">Hire me</a>
+</div></header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <span class="eyebrow">AI UGC video editor</span>
+      <h1 class="display">Ads that <span class="grad">stop the scroll.</span></h1>
+      <p class="lede">I make short-form video ads for <b>Meta Reels, TikTok and YouTube Shorts</b>: AI UGC product videos, edits with B-roll and captions, and motion-graphic ads built in <b>HyperFrames</b>.</p>
+      <div class="cta">
+        <a class="btn hot" href="#work">See the work ↓</a>
+        <a class="btn ghost" href="mailto:epsdizon@gmail.com">epsdizon@gmail.com</a>
+      </div>
+    </div>
+    <div class="stack" aria-label="Featured videos">
+      <div class="phone p1"><div class="scr"><video src="videos/spec-serum.mp4" poster="posters/spec-serum.jpg" muted loop playsinline preload="metadata" data-auto></video></div></div>
+      <div class="phone p2"><div class="scr"><video src="videos/the-spot-laundry.mp4" poster="posters/the-spot-laundry.jpg" muted loop playsinline preload="metadata" data-auto></video></div></div>
+      <div class="phone p3"><div class="scr"><video src="videos/spec-savings-app.mp4" poster="posters/spec-savings-app.jpg" muted loop playsinline preload="metadata" data-auto></video></div></div>
+    </div>
+  </div>
+
+  <div class="ticker" aria-hidden="true"><div>
+    <span>Meta Reels</span><span>✦</span><span>TikTok</span><span>✦</span><span>YouTube Shorts</span><span>✦</span><span>AI UGC</span><span>✦</span><span>HyperFrames</span><span>✦</span><span>Captions</span><span>✦</span><span>B-roll</span><span>✦</span>
+    <span>Meta Reels</span><span>✦</span><span>TikTok</span><span>✦</span><span>YouTube Shorts</span><span>✦</span><span>AI UGC</span><span>✦</span><span>HyperFrames</span><span>✦</span><span>Captions</span><span>✦</span><span>B-roll</span><span>✦</span>
+  </div></div>
+
+  <section id="work" class="wrap">
+    <div class="sec-head rv">
+      <div><h2 class="display">The <em>work</em></h2><p class="sub">Tap any video to watch it with sound.</p></div>
+      <div class="filters" role="group" aria-label="Filter videos">
+        <button type="button" data-f="all" aria-pressed="true">All</button>
+        <button type="button" data-f="local" aria-pressed="false">Client work</button>
+        <button type="button" data-f="spec" aria-pressed="false">Spec ads</button>
+        <button type="button" data-f="motion" aria-pressed="false">Motion</button>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head rv"><h2 class="display">What I <em>make</em></h2></div>
+    <div class="svc">
+      <div class="rv"><span class="n">01</span><b>AI UGC product videos</b><p>Avatar or voiceover-free product videos built from your photos, footage or script.</p></div>
+      <div class="rv"><span class="n">02</span><b>Edits &amp; B-roll</b><p>Your script and footage cut tight, with B-roll, captions, music and the dead air removed.</p></div>
+      <div class="rv"><span class="n">03</span><b>Motion-graphic ads</b><p>Kinetic text, product callouts and animated app screens, built in HyperFrames.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head rv"><h2 class="display">How I <em>work</em></h2></div>
+    <ol class="steps">
+      <li class="rv"><b>Brief</b><span>Your product, audience, offer and where the ad runs.</span></li>
+      <li class="rv"><b>Hook &amp; script</b><span>A first two seconds built to stop the scroll.</span></li>
+      <li class="rv"><b>Produce</b><span>AI avatar and voice, B-roll, HyperFrames motion graphics.</span></li>
+      <li class="rv"><b>Edit</b><span>Captions, pacing, music and dead-air removal in Descript.</span></li>
+      <li class="rv"><b>Deliver</b><span>9:16 by default, text kept inside each platform's safe zones.</span></li>
+    </ol>
+    <div class="promise rv"><span style="font-size:1.6rem">✅</span><div><b>Realism check on every video.</b> I cut any AI clip that looks unnatural, like warped hands or objects morphing mid-shot, before it reaches you.</div></div>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head rv"><h2 class="display">Tool<em>kit</em></h2></div>
+    <div class="tools rv"><span>HeyGen</span><span>ElevenLabs</span><span>Descript</span><span>HyperFrames</span><span>Canva</span><span>Google Drive</span></div>
+  </section>
+
+  <div class="wrap final rv">
+    <h2 class="display">Got a product? <span class="grad" style="background:linear-gradient(90deg,var(--hot),var(--lime));-webkit-background-clip:text;background-clip:text;color:transparent">Let's make it move.</span></h2>
+    <p class="sub" style="margin:0 auto 26px">Send me your product and where the ad will run.</p>
+    <div class="cta">
+      <a class="btn hot" href="mailto:epsdizon@gmail.com">Email me</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/epsdizon/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn ghost" href="Eugene_Dizon_Resume_AI_UGC.pdf" download>Resume (PDF)</a>
+    </div>
+  </div>
+</main>
+
+<footer><div class="wrap">Eugene Dizon · Pampanga, Philippines · Spec ads are made for fictional brands; fan concepts are unofficial and not affiliated with the original rights holders.</div></footer>
+
+<dialog id="lb" aria-label="Video player">
+  <button class="close" type="button" aria-label="Close">×</button>
+  <div class="lb"><video id="lbv" controls playsinline></video><p id="lbt"></p></div>
+</dialog>
+
+<script>
+/* Add a video: copy one line, drop the file in videos/ and its poster in posters/. */
+const WORK = [
+  { id: "the-spot-laundry", title: "The Spot Laundry Shop", tag: "Client work", cls: "", f: "local", desc: "Taglish promo for a laundromat in Floridablanca · 47s" },
+  { id: "footwear-ugc", title: "Footwear brand · AI avatar UGC", tag: "Client work", cls: "", f: "local", desc: "HeyGen avatar, product B-roll and captions, edited in Descript · 18s" },
+  { id: "spec-serum", title: "Halo & Dew · vitamin C serum", tag: "Spec ad", cls: "spec", f: "spec motion", desc: "Beauty product ad, HyperFrames · 15s" },
+  { id: "spec-coldbrew", title: "Slow Tide · cold brew", tag: "Spec ad", cls: "spec", f: "spec motion", desc: "\"3 reasons\" beverage ad, HyperFrames · 15s" },
+  { id: "spec-savings-app", title: "Jarly · savings app", tag: "Spec ad", cls: "spec", f: "spec motion", desc: "Animated app UI ad, HyperFrames · 15s" },
+  { id: "new-arrivals", title: "New Arrivals · fashion drop", tag: "Motion", cls: "", f: "motion", desc: "Collection teaser loop · 6s" },
+  { id: "one-piece-fan-concept", title: "Where is the One Piece?", tag: "Fan concept", cls: "fan", f: "motion", desc: "Light-drawn story animation, HyperFrames · 32s", wide: true },
+];
+const play = '<svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1.5v15l13-7.5z" fill="#0A0910"/></svg>';
+const grid = document.getElementById("grid");
+grid.innerHTML = WORK.map(w => {
+  const v = `<video src="videos/${w.id}.mp4" poster="posters/${w.id}.jpg" muted loop playsinline preload="metadata" data-auto></video>`;
+  const frame = w.wide ? `<div class="frame">${v}<span class="play">${play}</span></div>`
+                       : `<div class="phone frame"><div class="scr">${v}</div><span class="play">${play}</span></div>`;
+  return `<article class="item rv${w.wide ? " wide" : ""}" data-f="${w.f}" data-id="${w.id}" tabindex="0" role="button" aria-label="Play ${w.title}">
+    ${frame}<div class="meta"><span class="tag ${w.cls}">${w.tag}</span><h3>${w.title}</h3><p>${w.desc}</p></div></article>`;
+}).join("");
+
+/* autoplay muted only while on screen */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  const v = e.target;
+  if (e.isIntersecting) { const p = v.play(); if (p) p.catch(() => {}); } else v.pause();
+}), { threshold: 0.35 });
+document.querySelectorAll("video[data-auto]").forEach(v => io.observe(v));
+
+/* reveal */
+const ro = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); ro.unobserve(e.target); } }), { threshold: 0.12 });
+document.querySelectorAll(".rv").forEach(el => ro.observe(el));
+
+/* filters */
+document.querySelectorAll(".filters button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".filters button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  const f = b.dataset.f;
+  document.querySelectorAll(".item").forEach(it => it.classList.toggle("hide", f !== "all" && !it.dataset.f.split(" ").includes(f)));
+}));
+
+/* lightbox with sound */
+const lb = document.getElementById("lb"), lbv = document.getElementById("lbv"), lbt = document.getElementById("lbt");
+const open = id => {
+  const w = WORK.find(x => x.id === id);
+  lbv.src = `videos/${id}.mp4`; lbv.poster = `posters/${id}.jpg`; lbv.muted = false;
+  lbt.textContent = `${w.title} — ${w.desc}`;
+  lb.showModal(); const p = lbv.play(); if (p) p.catch(() => {});
+};
+grid.addEventListener("click", e => { const it = e.target.closest(".item"); if (it) open(it.dataset.id); });
+grid.addEventListener("keydown", e => { const it = e.target.closest(".item"); if (it && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); open(it.dataset.id); } });
+const shut = () => { lbv.pause(); lbv.removeAttribute("src"); lbv.load(); lb.close(); };
+lb.querySelector(".close").addEventListener("click", shut);
+lb.addEventListener("click", e => { if (e.target === lb) shut(); });
+lb.addEventListener("cancel", e => { e.preventDefault(); shut(); });
+</script>
+</body>
+</html>
