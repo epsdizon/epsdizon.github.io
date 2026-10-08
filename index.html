@@ -3,396 +3,324 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Eugene Dizon | Logistics Data Analyst</title>
-<meta name="description" content="Logistics data analyst who consolidates freight forwarder data into daily track and trace reporting and automates it with Excel VBA.">
-<meta property="og:title" content="Eugene Dizon | Logistics Data Analyst">
-<meta property="og:description" content="Freight forwarder data consolidation, daily track and trace reporting, and Excel VBA automation.">
-<meta property="og:url" content="https://epsdizon.github.io/">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚢</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📒</text></svg>">
+<title>Eugene Dizon Bookkeeping</title>
+<meta name="description" content="Bookkeeper for small businesses: Xero and QuickBooks Online, bank reconciliation, Stripe and PayPal, monthly P&L and Balance Sheet.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* Layout: a working-papers desk. Hero + close checklist, live reconciliation, tool crosswalk, report pack. */
 :root{
-  --paper:#EDF1F5; --surface:#FFFFFF; --ink:#13263B; --steel:#55677B; --line:#C9D3DD;
-  --signal:#F2B705; --hl:#FBE48A; --ok:#0E7A63; --bad:#B42318; --bar:#2C5F8A; --muted-bg:#E2E8EE;
-  box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#F2F4F1; --paper:#FFFFFF; --ink:#13241F; --dim:#56655F; --rule:#D7DED8;
+  --green:#0E7A52; --green-soft:#DDF0E6; --flag:#F2C230; --flag-soft:#FFF4CC; --red:#B83A26;
+  --display:"Bricolage Grotesque", "Arial Narrow", sans-serif;
+  --body:"IBM Plex Sans", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, monospace;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --paper:#0E1A27; --surface:#15263A; --ink:#E6EDF4; --steel:#9AABBD; --line:#2A3F56;
-    --signal:#F2B705; --hl:#5C4A00; --ok:#3CC4A0; --bad:#FF8A7A; --bar:#6FA8DC; --muted-bg:#1C3149;
-  }
-}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F1714; --paper:#16211D; --ink:#E7EFEA; --dim:#9DB0A7; --rule:#2A3832;
+  --green:#4CC994; --green-soft:#173A2B; --flag:#F2C230; --flag-soft:#3A3212; --red:#FF8A73; color-scheme:dark } }
 :root[data-theme="dark"]{
-  --paper:#0E1A27; --surface:#15263A; --ink:#E6EDF4; --steel:#9AABBD; --line:#2A3F56;
-  --signal:#F2B705; --hl:#5C4A00; --ok:#3CC4A0; --bad:#FF8A7A; --bar:#6FA8DC; --muted-bg:#1C3149;
-}
-*,*::before,*::after{box-sizing:inherit}
-html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
-body{margin:0;background:var(--paper);color:var(--ink);
-  font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  font-size:1.0625rem;line-height:1.55;font-stretch:100%}
+  --bg:#0F1714; --paper:#16211D; --ink:#E7EFEA; --dim:#9DB0A7; --rule:#2A3832;
+  --green:#4CC994; --green-soft:#173A2B; --flag:#F2C230; --flag-soft:#3A3212; --red:#FF8A73; color-scheme:dark }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body)}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-.prose{max-width:66ch}
-p{margin:0 0 1em}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:1.02;text-wrap:balance;margin:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 
-/* Header */
-.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
-.brand{white-space:nowrap;font-weight:800;font-stretch:80%;font-size:1.1rem;text-decoration:none;letter-spacing:.01em}
-.nav{display:flex;gap:18px;overflow-x:auto;white-space:nowrap;font-size:.95rem}
-.nav a{text-decoration:none;color:var(--steel);padding:4px 0}
-.nav a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
-@media (max-width:640px){.nav .opt{display:none}}
-@media (max-width:420px){.nav .opt2{display:none}}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.nav{display:flex;justify-content:space-between;align-items:center;height:60px}
+.brand{font-weight:600;text-decoration:none}
+.brand span{color:var(--green)}
+.navlinks{display:flex;gap:18px;font-size:.92rem}
+.navlinks a{text-decoration:none;color:var(--dim)}
+@media (max-width:620px){.navlinks a.o{display:none}}
 
-/* Hero */
-.hero{padding:56px 0 40px}
-h1{font-size:clamp(2.3rem,6.6vw,4.4rem);line-height:.98;font-weight:820;font-stretch:72%;
-  letter-spacing:-.005em;margin:0 0 22px;max-width:16ch}
-.lede{font-size:1.15rem;color:var(--steel);max-width:58ch}
-.lede strong{color:var(--ink);font-weight:600}
-.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
-.btn{display:inline-block;font:inherit;font-weight:650;font-size:1rem;padding:11px 18px;border-radius:4px;
-  text-decoration:none;cursor:pointer;border:2px solid var(--ink)}
-.btn.primary{background:var(--ink);color:var(--paper)}
-.btn.ghost{background:transparent;color:var(--ink)}
-.btn.signal{background:var(--signal);border-color:var(--signal);color:#241B00}
+/* hero */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-block:64px 48px}
+@media (max-width:880px){.hero{grid-template-columns:1fr;gap:32px;padding-block:40px}}
+.hero h1{font-size:clamp(2.8rem,7vw,5.2rem)}
+.hero h1 em{font-style:normal;color:var(--green);position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:-2%;right:-2%;bottom:.04em;height:.16em;background:var(--flag);z-index:-1;border-radius:2px}
+.hero p{font-size:1.15rem;color:var(--dim);max-width:52ch;margin:20px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{border:1.5px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:600;font-size:.92rem}
+.chip.g{background:var(--ink);color:var(--paper)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-block;font:inherit;font-weight:600;text-decoration:none;padding:12px 20px;border-radius:10px;border:2px solid var(--ink);cursor:pointer;background:transparent;color:var(--ink)}
+.btn.p{background:var(--green);border-color:var(--green);color:#fff}
 
-/* Demo panel */
-.demo{margin-top:44px;background:var(--surface);border:1px solid var(--line);border-radius:6px}
-.demo-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;
-  padding:16px 18px;border-bottom:1px solid var(--line)}
-.demo-head h2{margin:0;font-size:1.15rem;font-stretch:85%;font-weight:750}
-.demo-head p{margin:2px 0 0;font-size:.92rem;color:var(--steel)}
-.scroll{overflow-x:auto}
-table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.93rem}
-th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
-th{font-weight:650;color:var(--steel);font-size:.85rem;background:var(--muted-bg)}
-td.fix{background:var(--hl)}
-td.flag{box-shadow:inset 0 0 0 2px var(--bad);color:var(--bad);font-weight:600}
-td .blank{color:var(--steel);font-style:italic}
-tr.removed td{text-decoration:line-through;color:var(--steel);opacity:.6}
-.raw td.messy{color:var(--bad)}
-.log{padding:14px 18px 18px;font-size:.93rem}
-.log-sum{font-weight:650;margin:0 0 8px}
-.log ol{margin:0;padding-left:1.3em;color:var(--steel)}
-.log li{margin:2px 0}
-.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.85rem;color:var(--steel);margin-top:10px}
-.key{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border-radius:2px}
-.key.fix{background:var(--hl);border:1px solid var(--line)}
-.key.flag{box-shadow:inset 0 0 0 2px var(--bad)}
-.key.rem{background:var(--muted-bg);border:1px solid var(--line)}
+.close{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:22px 22px 18px;box-shadow:0 18px 40px rgba(19,36,31,.08)}
+.close h3{font-size:1.25rem;margin:4px 0 14px}
+.close ul{list-style:none;margin:0;padding:0}
+.close li{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px dashed var(--rule)}
+.tick{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;font-size:.8rem}
+.tick.w{background:var(--flag);color:#3A2E00}
+.close small{color:var(--dim);display:block;font-size:.82rem}
 
-/* Sections */
-section{padding:56px 0;border-top:1px solid var(--line)}
-h2.sec{font-size:clamp(1.7rem,4vw,2.5rem);font-stretch:75%;font-weight:800;line-height:1.05;margin:0 0 10px}
-.note{font-size:.92rem;color:var(--steel);margin-bottom:28px}
-h3{font-size:1.2rem;font-stretch:85%;font-weight:750;margin:34px 0 10px}
+section{padding-block:64px 8px}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.sh h2{font-size:clamp(2rem,4.6vw,3.2rem)}
+.sh p{color:var(--dim);max-width:60ch;margin:10px 0 0}
 
-/* Pipeline steps (a real sequence) */
-.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:grid;gap:0;border-left:3px solid var(--ink)}
-.steps li{counter-increment:s;padding:12px 0 12px 22px;position:relative}
-.steps li::before{content:counter(s);position:absolute;left:-15px;top:12px;width:27px;height:27px;border-radius:50%;
-  background:var(--paper);border:3px solid var(--ink);font-weight:800;font-size:.85rem;display:grid;place-items:center}
-.steps b{display:block;font-stretch:85%;font-size:1.05rem}
-.steps span{color:var(--steel);display:block;max-width:64ch}
+/* reconciliation */
+.rec{background:var(--paper);border:1px solid var(--rule);border-radius:16px;overflow:hidden}
+.recbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:1px;background:var(--rule);border-bottom:1px solid var(--rule)}
+.recbar>div{background:var(--paper);padding:14px 18px}
+.recbar b{display:block;font-size:1.35rem;font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+.recbar .diff b{color:var(--red)} .recbar .diff.ok b{color:var(--green)}
+.recbar .act{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+@media (max-width:760px){.recbar{grid-template-columns:1fr 1fr}.recbar .act{grid-column:1/-1}}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.94rem}
+th{text-align:left;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:10px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td.amt,th.amt{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.in{color:var(--green)}
+tr.r{cursor:pointer}
+tr.r:hover td{background:color-mix(in srgb,var(--green-soft) 50%,transparent)}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;padding:3px 9px;border-radius:999px;border:1.5px solid var(--rule);color:var(--dim)}
+tr.done .st{background:var(--green-soft);border-color:transparent;color:var(--green)}
+tr.parked td{background:var(--flag-soft)}
+tr.parked .st{background:var(--flag);border-color:transparent;color:#3A2E00}
+.hint{padding:12px 18px;font-size:.88rem;color:var(--dim)}
 
-/* Dashboard */
-.dash{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:18px;margin-top:14px}
-.dash-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
-.dash-top h4{margin:0;font-size:1.05rem;font-stretch:85%}
-.seg{display:inline-flex;border:2px solid var(--ink);border-radius:4px;overflow:hidden}
-.seg button{font:inherit;font-weight:650;font-size:.92rem;padding:7px 16px;background:transparent;color:var(--ink);border:0;cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
-.kpi{background:var(--surface);padding:12px 14px}
-.kpi .v{font-size:1.6rem;font-weight:800;font-stretch:75%;font-variant-numeric:tabular-nums;line-height:1.1}
-.kpi .l{font-size:.85rem;color:var(--steel)}
-@media (max-width:640px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:22px}
-@media (max-width:820px){.grid2{grid-template-columns:1fr}}
-.panel h5{margin:0 0 10px;font-size:.98rem;font-weight:700}
-.bars{display:grid;gap:7px}
-.bar{display:grid;grid-template-columns:9.5em 1fr 3em;align-items:center;gap:10px;font-size:.9rem}
-.bar .track,.bar .fill{display:block}
-.bar .track{height:12px;background:var(--muted-bg);border-radius:2px;overflow:hidden}
-.bar .fill{height:100%;background:var(--bar);transition:width .5s ease}
-.bar .n{text-align:right;font-variant-numeric:tabular-nums}
-td.heat{text-align:right}
-svg.trend{width:100%;height:auto;display:block}
-.trend text{fill:var(--steel);font-size:15px;font-family:inherit}
-.trend .ln{fill:none;stroke:var(--bar);stroke-width:3}
-.trend .pt{fill:var(--surface);stroke:var(--bar);stroke-width:3}
-.trend .gl{stroke:var(--line);stroke-width:1}
-.trend .val{fill:var(--ink);font-weight:650}
+/* crosswalk */
+.cw{background:var(--paper);border:1px solid var(--rule);border-radius:16px}
+.cw td{white-space:normal;vertical-align:top;min-width:180px}
+.cw td:first-child{font-weight:600;min-width:150px}
+.cw th:nth-child(2),.cw th:nth-child(3){color:var(--ink);font-size:.85rem}
 
-/* Other work */
-.work{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
-@media (max-width:720px){.work{grid-template-columns:1fr}}
-.work div{padding:16px 0;border-bottom:1px solid var(--line)}
-.work b{display:block;font-stretch:85%;font-size:1.08rem}
-.work span{color:var(--steel)}
+/* reports */
+.reports{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:860px){.reports{grid-template-columns:1fr}}
+.stmt{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:24px 24px 18px;min-width:0}
+.stmt h3{font-size:1.5rem}
+.stmt .who{color:var(--dim);font-size:.9rem;margin:4px 0 14px}
+.line{display:flex;justify-content:space-between;gap:16px;padding:6px 0;font-size:.95rem}
+.line span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.line.sub{padding-left:14px;color:var(--dim)}
+.line.tot{border-top:1.5px solid var(--ink);font-weight:600;margin-top:4px}
+.line.grand{border-top:3px double var(--ink);font-weight:600;font-size:1.05rem}
+.grp{margin-top:12px;font-weight:600}
+.badge{display:inline-flex;gap:6px;align-items:center;font-size:.82rem;font-weight:600;background:var(--green-soft);color:var(--green);padding:4px 10px;border-radius:999px;margin-top:12px}
+.query{margin-top:20px;background:var(--flag-soft);border:1.5px solid var(--flag);border-radius:16px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:start}
+@media (max-width:620px){.query{grid-template-columns:1fr}}
+.query b.num{font-size:1.25rem}
 
-/* Skills */
-.skills{display:grid;gap:18px}
-.skills dt{font-weight:700;font-stretch:85%;font-size:1.05rem}
-.skills dd{margin:4px 0 0;color:var(--steel);max-width:70ch}
+/* process */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding:0;margin:0;list-style:none;counter-reset:s}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+.steps li{counter-increment:s;border-top:3px solid var(--green);padding-top:12px}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:2rem;color:var(--green);display:block;line-height:1}
+.steps b{display:block;margin:6px 0 2px}
+.steps span{color:var(--dim);font-size:.92rem}
 
-/* Timeline (a real sequence over time) */
-.tl{list-style:none;margin:0;padding:0}
-.tl li{display:grid;grid-template-columns:11em 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
-.tl time{color:var(--steel);font-variant-numeric:tabular-nums}
-.tl b{display:block}
-.tl span{color:var(--steel)}
-@media (max-width:560px){.tl li{grid-template-columns:1fr;gap:2px}}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:760px){.about{grid-template-columns:1fr}}
+.about>div{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:22px}
+.about h3{font-size:1.2rem;margin-bottom:8px}
+.about ul{margin:0;padding-left:18px;color:var(--dim)}
 
-/* Contact */
-.contact{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
-footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:.88rem;color:var(--steel)}
+.final{text-align:center;padding-block:80px 60px}
+.final h2{font-size:clamp(2.2rem,6vw,4rem)}
+.final .cta{justify-content:center}
+.final .mail{font-family:var(--mono);margin-top:14px;color:var(--dim);user-select:all}
+footer{border-top:1px solid var(--rule);padding-block:22px 36px;color:var(--dim);font-size:.85rem}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
+
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <a class="brand" href="#">Eugene Dizon</a>
-    <nav class="nav" aria-label="Sections">
-      <a href="#case">Case study</a>
-      <a href="#work" class="opt">Other work</a>
-      <a href="#skills" class="opt">Skills</a>
-      <a href="#experience" class="opt2">Experience</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+<header><div class="wrap nav">
+  <a class="brand" href="#">Eugene Dizon <span>Bookkeeping</span></a>
+  <nav class="navlinks"><a class="o" href="#reconcile">Reconciliation</a><a class="o" href="#reports">Reports</a><a href="#contact">Contact</a></nav>
+</div></header>
 
-  <main>
-    <div class="hero">
-      <h1>Nine forwarders, nine file layouts, one clean shipment report by morning.</h1>
-      <p class="lede">I'm <strong>Eugene Dizon</strong>, a logistics data analyst in Pampanga, Philippines. For 4+ years I've turned freight forwarder data into daily air and ocean track and trace reporting, and built the Excel VBA automation that does the heavy lifting.</p>
-      <div class="actions">
-        <a class="btn primary" href="#case">Read the case study</a>
-        <a class="btn ghost" href="Eugene_Dizon_Resume.pdf" download>Download resume</a>
-      </div>
-
-      <div class="demo" aria-labelledby="demo-title">
-        <div class="demo-head">
-          <div>
-            <h2 id="demo-title">A morning's raw forwarder rows</h2>
-            <p id="demo-sub">This is what arrives before cleanup. Press the button to run the same rules my tool uses.</p>
-          </div>
-          <button class="btn signal" id="cleanBtn" aria-pressed="false">Clean the data</button>
-        </div>
-        <div class="scroll"><table id="demoTable"></table></div>
-        <div class="log" id="demoLog" aria-live="polite"></div>
-      </div>
-    </div>
-
-    <section id="case" aria-labelledby="case-title">
-      <h2 class="sec" id="case-title">Automating daily track and trace</h2>
-      <p class="note">Kairo Components is a fictional stand-in for my employer. Every company name and number in this section is sample data.</p>
-
-      <div class="prose">
-        <h3>The problem</h3>
-        <p>Every morning, nine forwarders send shipment reports in their own layouts: different column orders, dates typed as text, error values, and placeholder container numbers. Before the air and ocean dashboards could be refreshed, all of it had to be lined up by hand. Mistakes slipped through, and there was no quick way to see which forwarder's data needed fixing.</p>
-
-        <h3>What I built</h3>
-        <p>An Excel VBA tool run from one control workbook. One "Run all" button takes the morning's files through six steps, and stops with a clear message if any step fails, so a half-finished report never goes out.</p>
-      </div>
-
-      <ol class="steps">
-        <li><b>Consolidate</b><span>Reads each forwarder's file, maps its layout to one standard format, repairs dates and error values, removes duplicate and stale bookings, and logs every fix.</span></li>
-        <li><b>Refresh the dashboards</b><span>Fills the air and ocean dashboards, adds lookups like fiscal week and service type, refreshes the pivots, and saves a template copy and an upload copy.</span></li>
-        <li><b>Split out Sea-Air</b><span>Pulls sea-air shipments into their own file.</span></li>
-        <li><b>Build the upload file</b><span>Splits shipments carrying several order references into one row per reference, ready for system upload.</span></li>
-        <li><b>Score data quality</b><span>Counts errors per forwarder by unique shipment: missing order references, invalid MAWB or MBL numbers, missing or out-of-order milestones, and missing container numbers.</span></li>
-        <li><b>Track the trend</b><span>Rolls the errors into a monthly view for each fiscal year, so improvement or slippage is visible.</span></li>
-      </ol>
-
-      <h3>Sample output</h3>
-      <div class="dash">
-        <div class="dash-top">
-          <h4>Kairo Components daily shipment dashboard (sample data)</h4>
-          <div class="seg" role="group" aria-label="Transport mode">
-            <button type="button" data-mode="air" aria-pressed="true">Air</button>
-            <button type="button" data-mode="ocean" aria-pressed="false">Ocean</button>
-          </div>
-        </div>
-        <div class="kpis" id="kpis"></div>
-        <div class="grid2">
-          <div class="panel">
-            <h5>Shipments in transit by forwarder</h5>
-            <div class="bars" id="bars"></div>
-          </div>
-          <div class="panel">
-            <h5>Shipments with data errors, by month</h5>
-            <div id="trend"></div>
-          </div>
-        </div>
-        <div class="panel" style="margin-top:26px">
-          <h5>Data quality errors by forwarder (unique shipments)</h5>
-          <div class="scroll"><table id="dq"></table></div>
-        </div>
-      </div>
-
-      <div class="prose">
-        <h3>What changed</h3>
-        <p>The whole morning runs from one button. Every repair is written to a log, so any number on the dashboard can be traced back to the forwarder's original file. Each forwarder gets its own error file listing exactly which shipments to correct, instead of a general complaint.</p>
-      </div>
-    </section>
-
-    <section id="work" aria-labelledby="work-title">
-      <h2 class="sec" id="work-title">Other reports I own</h2>
-      <div class="work">
-        <div><b>Monthly arrival report</b><span>Consolidates forwarders' arrival reports into a monthly shipment report with a summary dashboard.</span></div>
-        <div><b>ETA reports</b><span>Daily estimated-arrival reports for shipments and parcels, built into fixed templates.</span></div>
-        <div><b>Business unit integration file</b><span>Turns the intercompany air and ocean shipment export into a business-unit file, automated with macros.</span></div>
-        <div><b>Inventory aging</b><span>Shows how long stock has been sitting, to support supply chain decisions.</span></div>
-      </div>
-    </section>
-
-    <section id="skills" aria-labelledby="skills-title">
-      <h2 class="sec" id="skills-title">Skills</h2>
-      <dl class="skills">
-        <div><dt>Logistics and supply chain</dt><dd>Freight forwarder track and trace, air and ocean shipment visibility, milestone tracking, container and MAWB/MBL validation, inventory aging, trade compliance</dd></div>
-        <div><dt>Data and automation</dt><dd>Excel VBA macros, PivotTables, SUMIFS and VLOOKUP, data cleaning, data quality checks, dashboard reporting, Tableau</dd></div>
-        <div><dt>Tools</dt><dd>Microsoft 365, Google Workspace, Notion, Asana, Trello, ClickUp</dd></div>
-      </dl>
-    </section>
-
-    <section id="experience" aria-labelledby="exp-title">
-      <h2 class="sec" id="exp-title">Experience</h2>
-      <ol class="tl">
-        <li><time>Mar 2022 – Sep 2026</time><div><b>Global Planning Analyst</b><span>Global electronics components manufacturer. Freight forwarder data consolidation, track and trace reporting, data quality, and Excel automation.</span></div></li>
-        <li><time>Sep 2020 – Oct 2025</time><div><b>Social Media Manager, freelance</b><span>Facebook pages and Meta ads for local businesses, including a pharmacy and a dental office.</span></div></li>
-        <li><time>2021</time><div><b>BS Service Engineering and Management</b><span>Mapúa University</span></div></li>
-      </ol>
-    </section>
-
-    <section id="contact" aria-labelledby="contact-title">
-      <h2 class="sec" id="contact-title">Let's talk shipments</h2>
-      <p class="prose">I'm open to logistics data analyst, supply chain reporting, and freight operations support roles, remote or hybrid.</p>
-      <div class="contact">
-        <a class="btn primary" href="mailto:epsdizon@gmail.com">epsdizon@gmail.com</a>
-        <a class="btn ghost" href="https://www.linkedin.com/in/epsdizon/" target="_blank" rel="noopener">LinkedIn profile</a>
-        <a class="btn ghost" href="Eugene_Dizon_Resume.pdf" download>Download resume (PDF)</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>Company names, forwarder names, and all data on this page are fictional samples. No employer data is shown.</footer>
+<main>
+<div class="wrap hero">
+  <div>
+    <span class="label">Bookkeeper · Xero &amp; QuickBooks Online</span>
+    <h1 style="margin-top:14px">Books that <em>balance</em>, every month.</h1>
+    <p>I categorize your transactions, reconcile every account, and send a clear Profit &amp; Loss and Balance Sheet each month. When something is unclear, I ask you instead of guessing.</p>
+    <div class="chips"><span class="chip g">Xero</span><span class="chip g">QuickBooks Online</span><span class="chip">Stripe</span><span class="chip">PayPal</span><span class="chip">Excel &amp; Google Sheets</span></div>
+    <div class="cta"><a class="btn p" href="#reconcile">Try the reconciliation</a><a class="btn" href="#reports">See a month-end pack</a></div>
+  </div>
+  <div class="close" aria-label="Month-end close checklist, sample client">
+    <span class="label">Month-end close · <span id="hClient"></span></span>
+    <h3 id="hPeriod"></h3>
+    <ul>
+      <li><span class="tick">✓</span><div>Bank feed categorized<small><span id="hTx" class="num"></span> transactions coded</small></div><span class="num">Done</span></li>
+      <li><span class="tick">✓</span><div>Checking reconciled<small>Statement matches the books</small></div><span class="num">0.00</span></li>
+      <li><span class="tick">✓</span><div>Stripe &amp; PayPal cleared<small>Gross sales, fees and payouts split out</small></div><span class="num">0.00</span></li>
+      <li><span class="tick w">?</span><div>1 item parked in Suspense<small>Question sent to the client</small></div><span class="num" id="hSusp"></span></li>
+      <li><span class="tick">✓</span><div>P&amp;L and Balance Sheet sent<small>Net income <span id="hNet" class="num"></span></small></div><span class="num">Sent</span></li>
+    </ul>
+  </div>
 </div>
 
+<section id="reconcile" class="wrap">
+  <div class="sh"><div><h2>Reconcile a month</h2><p>A sample bank statement for a fictional online candle shop. Tap a line to match it to the books, or reconcile everything at once. Watch the difference go to zero.</p></div></div>
+  <div class="rec">
+    <div class="recbar">
+      <div><span class="label">Statement balance</span><b id="rStmt"></b></div>
+      <div><span class="label">Reconciled in books</span><b id="rBook"></b></div>
+      <div class="diff" id="rDiffBox"><span class="label">Difference</span><b id="rDiff"></b></div>
+      <div class="act"><button class="btn p" id="rAll" type="button">Reconcile all</button><button class="btn" id="rReset" type="button">Reset</button></div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Date</th><th>Bank description</th><th>Coded to</th><th class="amt">Amount</th><th>Status</th></tr></thead>
+      <tbody id="rRows"></tbody>
+    </table></div>
+    <div class="hint" id="rHint">Opening balance on 1 Sep: <span class="num" id="rOpen"></span>. The yellow line has no clear purpose, so it goes to Suspense and onto the client query list.</div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sh"><div><h2>Same close, both tools</h2><p>How I run each step of the monthly close in Xero and in QuickBooks Online.</p></div></div>
+  <div class="cw tbl"><table>
+    <thead><tr><th>Step</th><th>Xero</th><th>QuickBooks Online</th></tr></thead>
+    <tbody>
+      <tr><td>Bank feed</td><td>Reconcile tab: match to existing items or create the transaction</td><td>Banking › For review: match, or categorize and add</td></tr>
+      <tr><td>Repeat payees</td><td>Bank rules for rent, software and fees</td><td>Bank rules (auto-categorize or auto-add)</td></tr>
+      <tr><td>Stripe &amp; PayPal</td><td>Clearing accounts: gross sales in, fees out, payout transferred to checking</td><td>The same clearing-account method, with payouts recorded as transfers</td></tr>
+      <tr><td>Unclear items</td><td>Coded to Suspense, listed on the query sheet</td><td>Coded to Suspense, listed on the query sheet</td></tr>
+      <tr><td>Reconcile</td><td>Statement balance matched to the bank account in Xero</td><td>Reconcile against the statement ending balance, difference 0.00</td></tr>
+      <tr><td>Reports</td><td>Profit and Loss, Balance Sheet, Aged Payables</td><td>Profit and Loss, Balance Sheet, A/P Aging Summary</td></tr>
+      <tr><td>Lock the month</td><td>Lock dates in Advanced settings</td><td>Close the books with a closing date</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="reports" class="wrap">
+  <div class="sh"><div><h2>The month-end pack</h2><p>What the client receives after the close. Sample figures, generated as real double-entry books so every total ties out.</p></div></div>
+  <div class="reports">
+    <div class="stmt"><h3>Profit &amp; Loss</h3><div class="who" id="plWho"></div><div id="pl"></div></div>
+    <div class="stmt"><h3>Balance Sheet</h3><div class="who" id="bsWho"></div><div id="bs"></div></div>
+  </div>
+  <div class="query">
+    <div><span class="label">Client query sheet</span><div style="font-weight:600;margin-top:4px" id="qItem"></div><div style="color:var(--dim);font-size:.85rem" id="qDate"></div></div>
+    <div id="qText"></div>
+    <b class="num" id="qAmt"></b>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sh"><div><h2>How a month runs</h2></div></div>
+  <ol class="steps">
+    <li><b>Collect</b><span>Bank, card, Stripe and PayPal statements, plus receipts.</span></li>
+    <li><b>Categorize</b><span>Every transaction coded to your chart of accounts.</span></li>
+    <li><b>Reconcile</b><span>Each account matched to its statement, difference 0.00.</span></li>
+    <li><b>Query</b><span>Unclear items parked in Suspense and sent to you as questions.</span></li>
+    <li><b>Report</b><span>P&amp;L and Balance Sheet with a short note on what changed.</span></li>
+  </ol>
+</section>
+
+<section class="wrap">
+  <div class="about">
+    <div><h3>Training</h3><ul>
+      <li>30-Day Bookkeeping Challenge (Kajea Vlogs), in progress</li>
+      <li>Practice client books: categorized bank, card, Stripe and PayPal activity; P&amp;L and Balance Sheet approved by the course coach</li>
+      <li>Xero setup with conversion balances</li>
+    </ul></div>
+    <div><h3>Why a data analyst makes a careful bookkeeper</h3><ul>
+      <li>4+ years reconciling shipment data from 9 freight forwarders every day</li>
+      <li>Builds Excel automation (VBA, SUMIFS, VLOOKUP, PivotTables) with audit logs</li>
+      <li>Used to fixed deadlines and detail-heavy checks</li>
+    </ul></div>
+  </div>
+</section>
+
+<div id="contact" class="wrap final">
+  <h2>Need your books caught up?</h2>
+  <p style="color:var(--dim)">Tell me what you sell, how you get paid, and which software you use.</p>
+  <div class="cta"><a class="btn p" href="mailto:epsdizon@gmail.com">Email me</a><a class="btn" href="https://www.linkedin.com/in/epsdizon/" target="_blank" rel="noopener">LinkedIn</a><a class="btn" href="Eugene_Dizon_Resume_Bookkeeper.pdf" download>Resume (PDF)</a></div>
+  <div class="mail">epsdizon@gmail.com</div>
+</div>
+</main>
+<footer><div class="wrap">Harbor &amp; Hearth Candle Co. is a fictional business. All figures on this page are sample data. Xero and QuickBooks Online are trademarks of their owners; this page is not affiliated with them.</div></footer>
+
 <script>
-/* ---------- Hero demo: raw vs cleaned forwarder rows ---------- */
-const COLS = ["Forwarder","Shipment","Order ref","Pickup","Departed","Container"];
-const ROWS = [
-  {cells:[["Northstar Freight"],["NSF2209183"],["4500118822"],
-    ["28.09.2026","9/28/2026","Text date 28.09.2026 converted to a real date"],
-    ["#N/A","","Error value #N/A cleared"],
-    ["TBA","","Placeholder container TBA cleared"]]},
-  {cells:[["BlueHarbor Logistics"],["BHL0917724"],["  4500119034 ","4500119034","Extra spaces trimmed from order ref"],
-    ["2026/09/27","9/27/2026","Text date 2026/09/27 converted"],["9/29/2026"],["MSCU4829117"]]},
-  {cells:[["Kestrel Global"],["KGL0055102"],["","", "Order ref blank after pickup, flagged to forwarder","flag"],
-    ["09\\26\\2026","9/26/2026","Backslash date 09\\26\\2026 converted"],
-    ["10/02/1926","","Impossible year 1926 cleared"],["TGHU1234567"]]},
-  {cells:[["Meridian Air & Sea"],["MAS7781320"],["4500118990"],["26-Sep-2026","9/26/2026","Text date 26-Sep-2026 converted"],
-    ["9/28/2026"],["00000000000","","Placeholder container 00000000000 cleared"]]},
-  {removed:"Exact duplicate of the Northstar row removed", cells:[["Northstar Freight"],["NSF2209183"],["4500118822"],["28.09.2026"],["#N/A"],["TBA"]]},
-  {cells:[["Corvid Cargo"],["CVC0088214"],["'4500119101","4500119101","Number stored as text converted to a number"],
-    ["9/25/2026"],["#REF!","","Error value #REF! cleared"],["CAIU5550123"]]}
-];
-let cleaned = false;
-const tbl = document.getElementById("demoTable"), log = document.getElementById("demoLog"), btn = document.getElementById("cleanBtn");
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const D = {"client": {"name": "Harbor & Hearth Candle Co.", "type": "Online candle shop (Shopify, Stripe, PayPal)", "period": "September 2026", "currency": "USD"}, "bank": {"opening": 8420.0, "closing": 10750.04, "rows": [{"date": "2026-09-02", "desc": "WAXWORKS SUPPLY CO", "amount": -1860.0, "account": "Inventory", "flag": false}, {"date": "2026-09-03", "desc": "SHOPIFY *SUBSCRIPTION", "amount": -79.0, "account": "Software Subscriptions", "flag": false}, {"date": "2026-09-04", "desc": "STUDIO RENT - SEPT", "amount": -1450.0, "account": "Rent", "flag": false}, {"date": "2026-09-05", "desc": "Stripe payout", "amount": 2576.69, "account": "Stripe Clearing", "flag": false}, {"date": "2026-09-09", "desc": "BOXLY PACKAGING", "amount": -412.75, "account": "Inventory", "flag": false}, {"date": "2026-09-12", "desc": "CITY POWER & WATER", "amount": -186.4, "account": "Utilities", "flag": false}, {"date": "2026-09-15", "desc": "Stripe payout", "amount": 3230.65, "account": "Stripe Clearing", "flag": false}, {"date": "2026-09-16", "desc": "PIRATESHIP POSTAGE", "amount": -528.9, "account": "Postage and Shipping", "flag": false}, {"date": "2026-09-20", "desc": "PayPal transfer to bank", "amount": 1157.57, "account": "PayPal Clearing", "flag": false}, {"date": "2026-09-22", "desc": "J. REYES PHOTOGRAPHY", "amount": -350.0, "account": "Contractors", "flag": false}, {"date": "2026-09-24", "desc": "Card payment", "amount": -640.0, "account": "Business Credit Card", "flag": false}, {"date": "2026-09-25", "desc": "OWNER TRANSFER", "amount": -1500.0, "account": "Owner's Draw", "flag": false}, {"date": "2026-09-26", "desc": "Stripe payout", "amount": 2987.18, "account": "Stripe Clearing", "flag": false}, {"date": "2026-09-27", "desc": "TRANSFER 0921-ACCT 4471", "amount": -600.0, "account": "Suspense", "flag": true}, {"date": "2026-09-30", "desc": "MONTHLY SERVICE FEE", "amount": -15.0, "account": "Bank Fees", "flag": false}]}, "pl": {"income": {"Sales": 9630.75, "Shipping Income": 673.5}, "revenue": 10304.25, "cogs": 2385.2, "gross_profit": 7919.05, "opex": {"Merchant Fees": 352.16, "Software Subscriptions": 93.99, "Rent": 1450.0, "Utilities": 186.4, "Postage and Shipping": 528.9, "Contractors": 350.0, "Bank Fees": 15.0, "Advertising": 720.0}, "net_income": 4222.6}, "bs": {"assets": {"Business Checking": 10750.04, "Inventory": 3037.55, "Suspense": 600.0}, "liabilities": {"Business Credit Card": 734.99}, "equity": {"Owner's Equity": 6000.0, "Owner's Draw": -1500.0, "Retained Earnings": 4930.0, "Net income (this month)": 4222.6}, "total_assets": 14387.59, "total_liabilities": 734.99, "total_equity": 13652.6}, "query": [{"date": "2026-09-27", "item": "Transfer to account ending 4471", "amount": 600.0, "question": "We don't recognize account 4471. Was this a loan, a personal transfer, or a supplier payment? Please send any receipt.", "parked_in": "Suspense"}], "kpi": {"transactions": 26, "gross_margin": 76.9, "net_margin": 41.0}};
+const $ = id => document.getElementById(id);
+const fmt = v => (v < 0 ? "−" : "") + Math.abs(v).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const day = d => new Date(d + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
-function renderDemo(){
-  let h = "<thead><tr>" + COLS.map(c=>`<th scope="col">${c}</th>`).join("") + "</tr></thead><tbody>";
-  const notes = []; let fixes=0, flags=0, removed=0;
-  ROWS.forEach(r=>{
-    const rem = cleaned && r.removed;
-    if (rem){ removed++; notes.push(r.removed); }
-    h += `<tr class="${rem?"removed":""}">`;
-    r.cells.forEach(c=>{
-      const [raw, clean, note, kind] = c;
-      const changed = note !== undefined;
-      if (!cleaned){
-        h += `<td class="${changed?"messy":""}">${raw===""?'<span class="blank">(blank)</span>':esc(raw)}</td>`;
-      } else if (changed && !rem){
-        const cls = kind==="flag" ? "flag" : "fix";
-        kind==="flag" ? flags++ : fixes++;
-        notes.push(note);
-        h += `<td class="${cls}" title="${esc(note)}">${clean===""?'<span class="blank">(blank)</span>':esc(clean)}</td>`;
-      } else {
-        h += `<td>${esc(raw)}</td>`;
-      }
-    });
-    h += "</tr>";
-  });
-  tbl.innerHTML = h + "</tbody>";
-  tbl.parentElement.parentElement.classList.toggle("raw", !cleaned);
-  if (!cleaned){
-    log.innerHTML = `<p class="log-sum">Red values will trip up the dashboard: text dates, error values, placeholders, a duplicate row, and a missing order reference.</p>`;
-  } else {
-    log.innerHTML = `<p class="log-sum">${fixes} fixes, ${removed} duplicate removed, ${flags} shipment flagged. Every change is written to the log:</p>`
-      + "<ol>" + notes.map(n=>`<li>${esc(n)}</li>`).join("") + "</ol>"
-      + `<div class="legend"><span><i class="key fix"></i>Fixed automatically</span><span><i class="key flag"></i>Flagged for the forwarder</span><span><i class="key rem"></i>Removed</span></div>`;
-  }
-  btn.textContent = cleaned ? "Show the raw rows" : "Clean the data";
-  btn.setAttribute("aria-pressed", String(cleaned));
-}
-btn.addEventListener("click", ()=>{ cleaned=!cleaned; renderDemo(); });
-renderDemo();
+$("hClient").textContent = D.client.name;
+$("hPeriod").textContent = D.client.period;
+$("hTx").textContent = D.kpi.transactions;
+$("hSusp").textContent = fmt(D.query[0].amount);
+$("hNet").textContent = "$" + fmt(D.pl.net_income);
 
-/* ---------- Sample dashboard ---------- */
-const FW = ["Northstar Freight","BlueHarbor Logistics","Kestrel Global","Meridian Air & Sea","Atlas Forwarding","Corvid Cargo","Pinecrest Logistics","Solent Shipping","Aurora Freight"];
-const DASH = {
-  air:{
-    kpi:[["1,284","Shipments tracked"],["537","In transit"],["212","Delivered in last 7 days"],["94.6%","Shipments with clean data"]],
-    transit:[142,98,77,64,51,39,33,21,12],
-    months:["Apr","May","Jun","Jul","Aug","Sep"], err:[8.9,8.1,7.4,6.2,5.6,5.4],
-    dqCols:["Missing order ref","MAWB error","Milestone issue"],
-    dq:[[4,2,6],[1,0,3],[6,3,5],[2,1,2],[0,0,1],[3,2,4],[1,1,0],[0,0,2],[2,0,1]]
-  },
-  ocean:{
-    kpi:[["846","Shipments tracked"],["401","In transit"],["97","Delivered in last 7 days"],["92.3%","Shipments with clean data"]],
-    transit:[88,71,40,66,35,28,30,26,17],
-    months:["Apr","May","Jun","Jul","Aug","Sep"], err:[11.2,10.6,9.1,8.4,8.0,7.7],
-    dqCols:["Missing order ref","MBL error","Milestone issue","Missing container"],
-    dq:[[3,1,5,4],[2,0,2,1],[5,2,6,3],[1,1,3,2],[0,0,2,0],[2,1,3,3],[1,0,1,1],[0,1,2,0],[1,0,1,2]]
-  }
-};
-function renderDash(mode){
-  const d = DASH[mode];
-  document.getElementById("kpis").innerHTML = d.kpi.map(([v,l])=>`<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
-  const max = Math.max(...d.transit);
-  document.getElementById("bars").innerHTML = FW.map((f,i)=>
-    `<div class="bar"><span>${f}</span><span class="track"><span class="fill" style="width:${d.transit[i]/max*100}%"></span></span><span class="n">${d.transit[i]}</span></div>`).join("");
-  // trend line
-  const W=420,H=210,pl=40,pr=18,pt=26,pb=30, top=12;
-  const x=i=>pl+i*(W-pl-pr)/(d.err.length-1), y=v=>pt+(1-v/top)*(H-pt-pb);
-  let s=`<svg class="trend" viewBox="0 0 ${W} ${H}" role="img" aria-label="Share of shipments with data errors fell from ${d.err[0]}% in ${d.months[0]} to ${d.err[d.err.length-1]}% in ${d.months[d.months.length-1]}">`;
-  [0,4,8,12].forEach(g=>{s+=`<line class="gl" x1="${pl}" x2="${W-pr}" y1="${y(g)}" y2="${y(g)}"/><text x="${pl-8}" y="${y(g)+4}" text-anchor="end">${g}%</text>`;});
-  s+=`<polyline class="ln" points="${d.err.map((v,i)=>x(i)+","+y(v)).join(" ")}"/>`;
-  d.err.forEach((v,i)=>{s+=`<circle class="pt" cx="${x(i)}" cy="${y(v)}" r="4.5"/><text class="val" x="${x(i)}" y="${y(v)-10}" text-anchor="middle">${v}%</text><text x="${x(i)}" y="${H-8}" text-anchor="middle">${d.months[i]}</text>`;});
-  document.getElementById("trend").innerHTML = s+"</svg>";
-  // DQ heat table
-  const dmax = Math.max(...d.dq.flat()) || 1;
-  let t = `<thead><tr><th scope="col">Forwarder</th>${d.dqCols.map(c=>`<th scope="col" style="text-align:right">${c}</th>`).join("")}<th scope="col" style="text-align:right">Total</th></tr></thead><tbody>`;
-  FW.forEach((f,i)=>{
-    const row=d.dq[i], tot=row.reduce((a,b)=>a+b,0);
-    t+=`<tr><th scope="row" style="background:transparent;color:inherit;font-weight:500">${f}</th>`
-      + row.map(v=>`<td class="heat" style="background:color-mix(in srgb, var(--bad) ${Math.round(v/dmax*38)}%, transparent)">${v}</td>`).join("")
-      + `<td class="heat"><b>${tot}</b></td></tr>`;
+/* reconciliation */
+const rows = D.bank.rows;
+const done = new Set();
+$("rStmt").textContent = fmt(D.bank.closing);
+$("rOpen").textContent = "$" + fmt(D.bank.opening);
+$("rRows").innerHTML = rows.map((r, i) => `<tr class="r" data-i="${i}" tabindex="0">
+  <td>${day(r.date)}</td><td>${r.desc}</td><td>${r.account}</td>
+  <td class="amt ${r.amount > 0 ? "in" : ""}">${fmt(r.amount)}</td>
+  <td><span class="st">Unmatched</span></td></tr>`).join("");
+const trs = [...document.querySelectorAll("tr.r")];
+function render() {
+  let book = D.bank.opening;
+  trs.forEach((tr, i) => {
+    const on = done.has(i), r = rows[i];
+    if (on) book += r.amount;
+    tr.classList.toggle("done", on && !r.flag);
+    tr.classList.toggle("parked", on && r.flag);
+    tr.querySelector(".st").textContent = on ? (r.flag ? "Suspense · asked client" : "Matched") : "Unmatched";
   });
-  document.getElementById("dq").innerHTML = t+"</tbody>";
-  document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.mode===mode)));
+  const diff = Math.round((D.bank.closing - book) * 100) / 100;
+  $("rBook").textContent = fmt(book);
+  $("rDiff").textContent = fmt(diff);
+  $("rDiffBox").classList.toggle("ok", diff === 0);
+  $("rDiff").textContent = diff === 0 ? "0.00 ✓" : fmt(diff);
 }
-document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>renderDash(b.dataset.mode)));
-renderDash("air");
+trs.forEach(tr => {
+  const t = () => { const i = +tr.dataset.i; done.has(i) ? done.delete(i) : done.add(i); render(); };
+  tr.addEventListener("click", t);
+  tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } });
+});
+$("rAll").addEventListener("click", () => {
+  rows.forEach((_, i) => setTimeout(() => { done.add(i); render(); }, i * 70));
+});
+$("rReset").addEventListener("click", () => { done.clear(); render(); });
+render();
+
+/* statements */
+const line = (k, v, cls = "") => `<div class="line ${cls}"><span>${k}</span><span>${fmt(v)}</span></div>`;
+const who = `${D.client.name} · ${D.client.period} · ${D.client.currency}`;
+$("plWho").textContent = who; $("bsWho").textContent = who + " · as of 30 Sep";
+const sumObj = o => Object.values(o).reduce((a, b) => a + b, 0);
+$("pl").innerHTML =
+  `<div class="grp">Revenue</div>` + Object.entries(D.pl.income).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total revenue", D.pl.revenue, "tot") +
+  line("Cost of goods sold", -D.pl.cogs) + line("Gross profit", D.pl.gross_profit, "tot") +
+  `<div class="grp">Operating expenses</div>` +
+  Object.entries(D.pl.opex).sort((a, b) => b[1] - a[1]).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total operating expenses", sumObj(D.pl.opex), "tot") +
+  line("Net income", D.pl.net_income, "grand") +
+  `<span class="badge">Gross margin ${D.kpi.gross_margin}% · Net margin ${D.kpi.net_margin}%</span>`;
+$("bs").innerHTML =
+  `<div class="grp">Assets</div>` + Object.entries(D.bs.assets).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total assets", D.bs.total_assets, "tot") +
+  `<div class="grp">Liabilities</div>` + Object.entries(D.bs.liabilities).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total liabilities", D.bs.total_liabilities, "tot") +
+  `<div class="grp">Equity</div>` + Object.entries(D.bs.equity).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total equity", D.bs.total_equity, "tot") +
+  line("Liabilities + equity", D.bs.total_liabilities + D.bs.total_equity, "grand") +
+  `<span class="badge">Balanced ✓ assets equal liabilities plus equity</span>`;
+const q = D.query[0];
+$("qItem").textContent = q.item; $("qDate").textContent = day(q.date) + " · parked in " + q.parked_in;
+$("qText").textContent = q.question; $("qAmt").textContent = "$" + fmt(q.amount);
 </script>
+
 </body>
 </html>
