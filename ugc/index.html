@@ -108,6 +108,10 @@ h2 em{font-style:normal;color:var(--lime)}
 .item.wide .frame{aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 0 0 2px #2E2A3A,0 30px 60px rgba(0,0,0,.5)}
 .item.wide video{width:100%;height:100%;object-fit:contain;display:block}
 @media (max-width:640px){.item.wide{grid-column:1/-1}}
+.item.sq{grid-column:span 2}
+.item.sq .frame{aspect-ratio:1/1;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 0 0 2px #2E2A3A,0 30px 60px rgba(0,0,0,.5)}
+.item.sq video{width:100%;height:100%;object-fit:cover;display:block}
+@media (max-width:640px){.item.sq{grid-column:1/-1}}
 .item .phone{width:100%}
 .meta{margin-top:14px}
 .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:6px;background:rgba(212,255,63,.12);color:var(--lime)}
@@ -257,6 +261,7 @@ dialog::backdrop{background:rgba(5,4,10,.88);backdrop-filter:blur(8px)}
 const WORK = [
   { id: "the-spot-laundry", title: "The Spot Laundry Shop", tag: "Client work", cls: "", f: "local", desc: "Taglish promo for a laundromat in Floridablanca · 47s" },
   { id: "footwear-ugc", title: "Footwear brand · AI avatar UGC", tag: "Client work", cls: "", f: "local", desc: "HeyGen avatar, product B-roll and captions, edited in Descript · 18s" },
+  { id: "tftg-milk-tea", title: "Tastes from the Greens · milk tea", tag: "Client work", cls: "", f: "local motion", desc: "Animated explainer with kinetic captions for a milk tea shop in Floridablanca · 59s", sq: true },
   { id: "spec-serum", title: "Halo & Dew · vitamin C serum", tag: "Spec ad", cls: "spec", f: "spec motion", desc: "Beauty product ad, HyperFrames · 15s" },
   { id: "spec-coldbrew", title: "Slow Tide · cold brew", tag: "Spec ad", cls: "spec", f: "spec motion", desc: "\"3 reasons\" beverage ad, HyperFrames · 15s" },
   { id: "spec-savings-app", title: "Jarly · savings app", tag: "Spec ad", cls: "spec", f: "spec motion", desc: "Animated app UI ad, HyperFrames · 15s" },
@@ -267,9 +272,9 @@ const play = '<svg width="16" height="18" viewBox="0 0 16 18"><path d="M2 1.5v15
 const grid = document.getElementById("grid");
 grid.innerHTML = WORK.map(w => {
   const v = `<video src="videos/${w.id}.mp4" poster="posters/${w.id}.jpg" muted loop playsinline preload="metadata" data-auto></video>`;
-  const frame = w.wide ? `<div class="frame">${v}<span class="play">${play}</span></div>`
+  const frame = (w.wide || w.sq) ? `<div class="frame">${v}<span class="play">${play}</span></div>`
                        : `<div class="phone frame"><div class="scr">${v}</div><span class="play">${play}</span></div>`;
-  return `<article class="item rv${w.wide ? " wide" : ""}" data-f="${w.f}" data-id="${w.id}" tabindex="0" role="button" aria-label="Play ${w.title}">
+  return `<article class="item rv${w.wide ? " wide" : w.sq ? " sq" : ""}" data-f="${w.f}" data-id="${w.id}" tabindex="0" role="button" aria-label="Play ${w.title}">
     ${frame}<div class="meta"><span class="tag ${w.cls}">${w.tag}</span><h3>${w.title}</h3><p>${w.desc}</p></div></article>`;
 }).join("");
 
