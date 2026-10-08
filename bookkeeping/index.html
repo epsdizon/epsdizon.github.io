@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📒</text></svg>">
+<title>Eugene Dizon Bookkeeping</title>
+<meta name="description" content="Bookkeeper for small businesses: Xero and QuickBooks Online, bank reconciliation, Stripe and PayPal, monthly P&L and Balance Sheet.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: a working-papers desk. Hero + close checklist, live reconciliation, tool crosswalk, report pack. */
+:root{
+  --bg:#F2F4F1; --paper:#FFFFFF; --ink:#13241F; --dim:#56655F; --rule:#D7DED8;
+  --green:#0E7A52; --green-soft:#DDF0E6; --flag:#F2C230; --flag-soft:#FFF4CC; --red:#B83A26;
+  --display:"Bricolage Grotesque", "Arial Narrow", sans-serif;
+  --body:"IBM Plex Sans", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F1714; --paper:#16211D; --ink:#E7EFEA; --dim:#9DB0A7; --rule:#2A3832;
+  --green:#4CC994; --green-soft:#173A2B; --flag:#F2C230; --flag-soft:#3A3212; --red:#FF8A73; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0F1714; --paper:#16211D; --ink:#E7EFEA; --dim:#9DB0A7; --rule:#2A3832;
+  --green:#4CC994; --green-soft:#173A2B; --flag:#F2C230; --flag-soft:#3A3212; --red:#FF8A73; color-scheme:dark }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--body)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.02em;line-height:1.02;text-wrap:balance;margin:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-size:.78rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.nav{display:flex;justify-content:space-between;align-items:center;height:60px}
+.brand{font-weight:600;text-decoration:none}
+.brand span{color:var(--green)}
+.navlinks{display:flex;gap:18px;font-size:.92rem}
+.navlinks a{text-decoration:none;color:var(--dim)}
+@media (max-width:620px){.navlinks a.o{display:none}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;padding-block:64px 48px}
+@media (max-width:880px){.hero{grid-template-columns:1fr;gap:32px;padding-block:40px}}
+.hero h1{font-size:clamp(2.8rem,7vw,5.2rem)}
+.hero h1 em{font-style:normal;color:var(--green);position:relative;white-space:nowrap}
+.hero h1 em::after{content:"";position:absolute;left:-2%;right:-2%;bottom:.04em;height:.16em;background:var(--flag);z-index:-1;border-radius:2px}
+.hero p{font-size:1.15rem;color:var(--dim);max-width:52ch;margin:20px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{border:1.5px solid var(--ink);border-radius:999px;padding:6px 14px;font-weight:600;font-size:.92rem}
+.chip.g{background:var(--ink);color:var(--paper)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-block;font:inherit;font-weight:600;text-decoration:none;padding:12px 20px;border-radius:10px;border:2px solid var(--ink);cursor:pointer;background:transparent;color:var(--ink)}
+.btn.p{background:var(--green);border-color:var(--green);color:#fff}
+
+.close{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:22px 22px 18px;box-shadow:0 18px 40px rgba(19,36,31,.08)}
+.close h3{font-size:1.25rem;margin:4px 0 14px}
+.close ul{list-style:none;margin:0;padding:0}
+.close li{display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px dashed var(--rule)}
+.tick{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;font-size:.8rem}
+.tick.w{background:var(--flag);color:#3A2E00}
+.close small{color:var(--dim);display:block;font-size:.82rem}
+
+section{padding-block:64px 8px}
+.sh{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.sh h2{font-size:clamp(2rem,4.6vw,3.2rem)}
+.sh p{color:var(--dim);max-width:60ch;margin:10px 0 0}
+
+/* reconciliation */
+.rec{background:var(--paper);border:1px solid var(--rule);border-radius:16px;overflow:hidden}
+.recbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:1px;background:var(--rule);border-bottom:1px solid var(--rule)}
+.recbar>div{background:var(--paper);padding:14px 18px}
+.recbar b{display:block;font-size:1.35rem;font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+.recbar .diff b{color:var(--red)} .recbar .diff.ok b{color:var(--green)}
+.recbar .act{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+@media (max-width:760px){.recbar{grid-template-columns:1fr 1fr}.recbar .act{grid-column:1/-1}}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.94rem}
+th{text-align:left;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);padding:10px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--rule);white-space:nowrap}
+td.amt,th.amt{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.in{color:var(--green)}
+tr.r{cursor:pointer}
+tr.r:hover td{background:color-mix(in srgb,var(--green-soft) 50%,transparent)}
+.st{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:600;padding:3px 9px;border-radius:999px;border:1.5px solid var(--rule);color:var(--dim)}
+tr.done .st{background:var(--green-soft);border-color:transparent;color:var(--green)}
+tr.parked td{background:var(--flag-soft)}
+tr.parked .st{background:var(--flag);border-color:transparent;color:#3A2E00}
+.hint{padding:12px 18px;font-size:.88rem;color:var(--dim)}
+
+/* crosswalk */
+.cw{background:var(--paper);border:1px solid var(--rule);border-radius:16px}
+.cw td{white-space:normal;vertical-align:top;min-width:180px}
+.cw td:first-child{font-weight:600;min-width:150px}
+.cw th:nth-child(2),.cw th:nth-child(3){color:var(--ink);font-size:.85rem}
+
+/* reports */
+.reports{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:860px){.reports{grid-template-columns:1fr}}
+.stmt{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:24px 24px 18px;min-width:0}
+.stmt h3{font-size:1.5rem}
+.stmt .who{color:var(--dim);font-size:.9rem;margin:4px 0 14px}
+.line{display:flex;justify-content:space-between;gap:16px;padding:6px 0;font-size:.95rem}
+.line span:last-child{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.line.sub{padding-left:14px;color:var(--dim)}
+.line.tot{border-top:1.5px solid var(--ink);font-weight:600;margin-top:4px}
+.line.grand{border-top:3px double var(--ink);font-weight:600;font-size:1.05rem}
+.grp{margin-top:12px;font-weight:600}
+.badge{display:inline-flex;gap:6px;align-items:center;font-size:.82rem;font-weight:600;background:var(--green-soft);color:var(--green);padding:4px 10px;border-radius:999px;margin-top:12px}
+.query{margin-top:20px;background:var(--flag-soft);border:1.5px solid var(--flag);border-radius:16px;padding:20px 22px;display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:start}
+@media (max-width:620px){.query{grid-template-columns:1fr}}
+.query b.num{font-size:1.25rem}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding:0;margin:0;list-style:none;counter-reset:s}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}}
+.steps li{counter-increment:s;border-top:3px solid var(--green);padding-top:12px}
+.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:2rem;color:var(--green);display:block;line-height:1}
+.steps b{display:block;margin:6px 0 2px}
+.steps span{color:var(--dim);font-size:.92rem}
+
+.about{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:760px){.about{grid-template-columns:1fr}}
+.about>div{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:22px}
+.about h3{font-size:1.2rem;margin-bottom:8px}
+.about ul{margin:0;padding-left:18px;color:var(--dim)}
+
+.final{text-align:center;padding-block:80px 60px}
+.final h2{font-size:clamp(2.2rem,6vw,4rem)}
+.final .cta{justify-content:center}
+.final .mail{font-family:var(--mono);margin-top:14px;color:var(--dim);user-select:all}
+footer{border-top:1px solid var(--rule);padding-block:22px 36px;color:var(--dim);font-size:.85rem}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+</head>
+<body>
+<header><div class="wrap nav">
+  <a class="brand" href="#">Eugene Dizon <span>Bookkeeping</span></a>
+  <nav class="navlinks"><a class="o" href="#reconcile">Reconciliation</a><a class="o" href="#reports">Reports</a><a href="#contact">Contact</a></nav>
+</div></header>
+
+<main>
+<div class="wrap hero">
+  <div>
+    <span class="label">Bookkeeper · Xero &amp; QuickBooks Online</span>
+    <h1 style="margin-top:14px">Books that <em>balance</em>, every month.</h1>
+    <p>I categorize your transactions, reconcile every account, and send a clear Profit &amp; Loss and Balance Sheet each month. When something is unclear, I ask you instead of guessing.</p>
+    <div class="chips"><span class="chip g">Xero</span><span class="chip g">QuickBooks Online</span><span class="chip">Stripe</span><span class="chip">PayPal</span><span class="chip">Excel &amp; Google Sheets</span></div>
+    <div class="cta"><a class="btn p" href="#reconcile">Try the reconciliation</a><a class="btn" href="#reports">See a month-end pack</a></div>
+  </div>
+  <div class="close" aria-label="Month-end close checklist, sample client">
+    <span class="label">Month-end close · <span id="hClient"></span></span>
+    <h3 id="hPeriod"></h3>
+    <ul>
+      <li><span class="tick">✓</span><div>Bank feed categorized<small><span id="hTx" class="num"></span> transactions coded</small></div><span class="num">Done</span></li>
+      <li><span class="tick">✓</span><div>Checking reconciled<small>Statement matches the books</small></div><span class="num">0.00</span></li>
+      <li><span class="tick">✓</span><div>Stripe &amp; PayPal cleared<small>Gross sales, fees and payouts split out</small></div><span class="num">0.00</span></li>
+      <li><span class="tick w">?</span><div>1 item parked in Suspense<small>Question sent to the client</small></div><span class="num" id="hSusp"></span></li>
+      <li><span class="tick">✓</span><div>P&amp;L and Balance Sheet sent<small>Net income <span id="hNet" class="num"></span></small></div><span class="num">Sent</span></li>
+    </ul>
+  </div>
+</div>
+
+<section id="reconcile" class="wrap">
+  <div class="sh"><div><h2>Reconcile a month</h2><p>A sample bank statement for a fictional online candle shop. Tap a line to match it to the books, or reconcile everything at once. Watch the difference go to zero.</p></div></div>
+  <div class="rec">
+    <div class="recbar">
+      <div><span class="label">Statement balance</span><b id="rStmt"></b></div>
+      <div><span class="label">Reconciled in books</span><b id="rBook"></b></div>
+      <div class="diff" id="rDiffBox"><span class="label">Difference</span><b id="rDiff"></b></div>
+      <div class="act"><button class="btn p" id="rAll" type="button">Reconcile all</button><button class="btn" id="rReset" type="button">Reset</button></div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Date</th><th>Bank description</th><th>Coded to</th><th class="amt">Amount</th><th>Status</th></tr></thead>
+      <tbody id="rRows"></tbody>
+    </table></div>
+    <div class="hint" id="rHint">Opening balance on 1 Sep: <span class="num" id="rOpen"></span>. The yellow line has no clear purpose, so it goes to Suspense and onto the client query list.</div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sh"><div><h2>Same close, both tools</h2><p>How I run each step of the monthly close in Xero and in QuickBooks Online.</p></div></div>
+  <div class="cw tbl"><table>
+    <thead><tr><th>Step</th><th>Xero</th><th>QuickBooks Online</th></tr></thead>
+    <tbody>
+      <tr><td>Bank feed</td><td>Reconcile tab: match to existing items or create the transaction</td><td>Banking › For review: match, or categorize and add</td></tr>
+      <tr><td>Repeat payees</td><td>Bank rules for rent, software and fees</td><td>Bank rules (auto-categorize or auto-add)</td></tr>
+      <tr><td>Stripe &amp; PayPal</td><td>Clearing accounts: gross sales in, fees out, payout transferred to checking</td><td>The same clearing-account method, with payouts recorded as transfers</td></tr>
+      <tr><td>Unclear items</td><td>Coded to Suspense, listed on the query sheet</td><td>Coded to Suspense, listed on the query sheet</td></tr>
+      <tr><td>Reconcile</td><td>Statement balance matched to the bank account in Xero</td><td>Reconcile against the statement ending balance, difference 0.00</td></tr>
+      <tr><td>Reports</td><td>Profit and Loss, Balance Sheet, Aged Payables</td><td>Profit and Loss, Balance Sheet, A/P Aging Summary</td></tr>
+      <tr><td>Lock the month</td><td>Lock dates in Advanced settings</td><td>Close the books with a closing date</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="reports" class="wrap">
+  <div class="sh"><div><h2>The month-end pack</h2><p>What the client receives after the close. Sample figures, generated as real double-entry books so every total ties out.</p></div></div>
+  <div class="reports">
+    <div class="stmt"><h3>Profit &amp; Loss</h3><div class="who" id="plWho"></div><div id="pl"></div></div>
+    <div class="stmt"><h3>Balance Sheet</h3><div class="who" id="bsWho"></div><div id="bs"></div></div>
+  </div>
+  <div class="query">
+    <div><span class="label">Client query sheet</span><div style="font-weight:600;margin-top:4px" id="qItem"></div><div style="color:var(--dim);font-size:.85rem" id="qDate"></div></div>
+    <div id="qText"></div>
+    <b class="num" id="qAmt"></b>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="sh"><div><h2>How a month runs</h2></div></div>
+  <ol class="steps">
+    <li><b>Collect</b><span>Bank, card, Stripe and PayPal statements, plus receipts.</span></li>
+    <li><b>Categorize</b><span>Every transaction coded to your chart of accounts.</span></li>
+    <li><b>Reconcile</b><span>Each account matched to its statement, difference 0.00.</span></li>
+    <li><b>Query</b><span>Unclear items parked in Suspense and sent to you as questions.</span></li>
+    <li><b>Report</b><span>P&amp;L and Balance Sheet with a short note on what changed.</span></li>
+  </ol>
+</section>
+
+<section class="wrap">
+  <div class="about">
+    <div><h3>Training</h3><ul>
+      <li>30-Day Bookkeeping Challenge (Kajea Vlogs), in progress</li>
+      <li>Practice client books: categorized bank, card, Stripe and PayPal activity; P&amp;L and Balance Sheet approved by the course coach</li>
+      <li>Xero setup with conversion balances</li>
+    </ul></div>
+    <div><h3>Why a data analyst makes a careful bookkeeper</h3><ul>
+      <li>4+ years reconciling shipment data from 9 freight forwarders every day</li>
+      <li>Builds Excel automation (VBA, SUMIFS, VLOOKUP, PivotTables) with audit logs</li>
+      <li>Used to fixed deadlines and detail-heavy checks</li>
+    </ul></div>
+  </div>
+</section>
+
+<div id="contact" class="wrap final">
+  <h2>Need your books caught up?</h2>
+  <p style="color:var(--dim)">Tell me what you sell, how you get paid, and which software you use.</p>
+  <div class="cta"><a class="btn p" href="mailto:epsdizon@gmail.com">Email me</a><a class="btn" href="https://www.linkedin.com/in/epsdizon/" target="_blank" rel="noopener">LinkedIn</a><a class="btn" href="Eugene_Dizon_Resume_Bookkeeper.pdf" download>Resume (PDF)</a></div>
+  <div class="mail">epsdizon@gmail.com</div>
+</div>
+</main>
+<footer><div class="wrap">Harbor &amp; Hearth Candle Co. is a fictional business. All figures on this page are sample data. Xero and QuickBooks Online are trademarks of their owners; this page is not affiliated with them.</div></footer>
+
+<script>
+const D = {"client": {"name": "Harbor & Hearth Candle Co.", "type": "Online candle shop (Shopify, Stripe, PayPal)", "period": "September 2026", "currency": "USD"}, "bank": {"opening": 8420.0, "closing": 10750.04, "rows": [{"date": "2026-09-02", "desc": "WAXWORKS SUPPLY CO", "amount": -1860.0, "account": "Inventory", "flag": false}, {"date": "2026-09-03", "desc": "SHOPIFY *SUBSCRIPTION", "amount": -79.0, "account": "Software Subscriptions", "flag": false}, {"date": "2026-09-04", "desc": "STUDIO RENT - SEPT", "amount": -1450.0, "account": "Rent", "flag": false}, {"date": "2026-09-05", "desc": "Stripe payout", "amount": 2576.69, "account": "Stripe Clearing", "flag": false}, {"date": "2026-09-09", "desc": "BOXLY PACKAGING", "amount": -412.75, "account": "Inventory", "flag": false}, {"date": "2026-09-12", "desc": "CITY POWER & WATER", "amount": -186.4, "account": "Utilities", "flag": false}, {"date": "2026-09-15", "desc": "Stripe payout", "amount": 3230.65, "account": "Stripe Clearing", "flag": false}, {"date": "2026-09-16", "desc": "PIRATESHIP POSTAGE", "amount": -528.9, "account": "Postage and Shipping", "flag": false}, {"date": "2026-09-20", "desc": "PayPal transfer to bank", "amount": 1157.57, "account": "PayPal Clearing", "flag": false}, {"date": "2026-09-22", "desc": "J. REYES PHOTOGRAPHY", "amount": -350.0, "account": "Contractors", "flag": false}, {"date": "2026-09-24", "desc": "Card payment", "amount": -640.0, "account": "Business Credit Card", "flag": false}, {"date": "2026-09-25", "desc": "OWNER TRANSFER", "amount": -1500.0, "account": "Owner's Draw", "flag": false}, {"date": "2026-09-26", "desc": "Stripe payout", "amount": 2987.18, "account": "Stripe Clearing", "flag": false}, {"date": "2026-09-27", "desc": "TRANSFER 0921-ACCT 4471", "amount": -600.0, "account": "Suspense", "flag": true}, {"date": "2026-09-30", "desc": "MONTHLY SERVICE FEE", "amount": -15.0, "account": "Bank Fees", "flag": false}]}, "pl": {"income": {"Sales": 9630.75, "Shipping Income": 673.5}, "revenue": 10304.25, "cogs": 2385.2, "gross_profit": 7919.05, "opex": {"Merchant Fees": 352.16, "Software Subscriptions": 93.99, "Rent": 1450.0, "Utilities": 186.4, "Postage and Shipping": 528.9, "Contractors": 350.0, "Bank Fees": 15.0, "Advertising": 720.0}, "net_income": 4222.6}, "bs": {"assets": {"Business Checking": 10750.04, "Inventory": 3037.55, "Suspense": 600.0}, "liabilities": {"Business Credit Card": 734.99}, "equity": {"Owner's Equity": 6000.0, "Owner's Draw": -1500.0, "Retained Earnings": 4930.0, "Net income (this month)": 4222.6}, "total_assets": 14387.59, "total_liabilities": 734.99, "total_equity": 13652.6}, "query": [{"date": "2026-09-27", "item": "Transfer to account ending 4471", "amount": 600.0, "question": "We don't recognize account 4471. Was this a loan, a personal transfer, or a supplier payment? Please send any receipt.", "parked_in": "Suspense"}], "kpi": {"transactions": 26, "gross_margin": 76.9, "net_margin": 41.0}};
+const $ = id => document.getElementById(id);
+const fmt = v => (v < 0 ? "−" : "") + Math.abs(v).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const day = d => new Date(d + "T00:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+
+$("hClient").textContent = D.client.name;
+$("hPeriod").textContent = D.client.period;
+$("hTx").textContent = D.kpi.transactions;
+$("hSusp").textContent = fmt(D.query[0].amount);
+$("hNet").textContent = "$" + fmt(D.pl.net_income);
+
+/* reconciliation */
+const rows = D.bank.rows;
+const done = new Set();
+$("rStmt").textContent = fmt(D.bank.closing);
+$("rOpen").textContent = "$" + fmt(D.bank.opening);
+$("rRows").innerHTML = rows.map((r, i) => `<tr class="r" data-i="${i}" tabindex="0">
+  <td>${day(r.date)}</td><td>${r.desc}</td><td>${r.account}</td>
+  <td class="amt ${r.amount > 0 ? "in" : ""}">${fmt(r.amount)}</td>
+  <td><span class="st">Unmatched</span></td></tr>`).join("");
+const trs = [...document.querySelectorAll("tr.r")];
+function render() {
+  let book = D.bank.opening;
+  trs.forEach((tr, i) => {
+    const on = done.has(i), r = rows[i];
+    if (on) book += r.amount;
+    tr.classList.toggle("done", on && !r.flag);
+    tr.classList.toggle("parked", on && r.flag);
+    tr.querySelector(".st").textContent = on ? (r.flag ? "Suspense · asked client" : "Matched") : "Unmatched";
+  });
+  const diff = Math.round((D.bank.closing - book) * 100) / 100;
+  $("rBook").textContent = fmt(book);
+  $("rDiff").textContent = fmt(diff);
+  $("rDiffBox").classList.toggle("ok", diff === 0);
+  $("rDiff").textContent = diff === 0 ? "0.00 ✓" : fmt(diff);
+}
+trs.forEach(tr => {
+  const t = () => { const i = +tr.dataset.i; done.has(i) ? done.delete(i) : done.add(i); render(); };
+  tr.addEventListener("click", t);
+  tr.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } });
+});
+$("rAll").addEventListener("click", () => {
+  rows.forEach((_, i) => setTimeout(() => { done.add(i); render(); }, i * 70));
+});
+$("rReset").addEventListener("click", () => { done.clear(); render(); });
+render();
+
+/* statements */
+const line = (k, v, cls = "") => `<div class="line ${cls}"><span>${k}</span><span>${fmt(v)}</span></div>`;
+const who = `${D.client.name} · ${D.client.period} · ${D.client.currency}`;
+$("plWho").textContent = who; $("bsWho").textContent = who + " · as of 30 Sep";
+const sumObj = o => Object.values(o).reduce((a, b) => a + b, 0);
+$("pl").innerHTML =
+  `<div class="grp">Revenue</div>` + Object.entries(D.pl.income).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total revenue", D.pl.revenue, "tot") +
+  line("Cost of goods sold", -D.pl.cogs) + line("Gross profit", D.pl.gross_profit, "tot") +
+  `<div class="grp">Operating expenses</div>` +
+  Object.entries(D.pl.opex).sort((a, b) => b[1] - a[1]).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total operating expenses", sumObj(D.pl.opex), "tot") +
+  line("Net income", D.pl.net_income, "grand") +
+  `<span class="badge">Gross margin ${D.kpi.gross_margin}% · Net margin ${D.kpi.net_margin}%</span>`;
+$("bs").innerHTML =
+  `<div class="grp">Assets</div>` + Object.entries(D.bs.assets).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total assets", D.bs.total_assets, "tot") +
+  `<div class="grp">Liabilities</div>` + Object.entries(D.bs.liabilities).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total liabilities", D.bs.total_liabilities, "tot") +
+  `<div class="grp">Equity</div>` + Object.entries(D.bs.equity).map(([k, v]) => line(k, v, "sub")).join("") +
+  line("Total equity", D.bs.total_equity, "tot") +
+  line("Liabilities + equity", D.bs.total_liabilities + D.bs.total_equity, "grand") +
+  `<span class="badge">Balanced ✓ assets equal liabilities plus equity</span>`;
+const q = D.query[0];
+$("qItem").textContent = q.item; $("qDate").textContent = day(q.date) + " · parked in " + q.parked_in;
+$("qText").textContent = q.question; $("qAmt").textContent = "$" + fmt(q.amount);
+</script>
+
+</body>
+</html>
