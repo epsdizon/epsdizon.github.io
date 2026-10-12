@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Where is the One Piece</title>
+    <script src="assets/gsap.min.js"></script>
+    <script src="scene.js"></script>
+    <style>
+      @font-face { font-family: "Cinzel"; src: url("assets/fonts/cinzel-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Cinzel"; src: url("assets/fonts/cinzel-latin-700-normal.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Cinzel"; src: url("assets/fonts/cinzel-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 100%; height: 100%; background: #000; font-family: "Cinzel", serif; }
+      #light { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .sub {
+        position: absolute; left: 0; right: 0; bottom: 92px;
+        display: flex; justify-content: center; pointer-events: none;
+      }
+      .sub span {
+        display: block; font-size: 34px; font-weight: 400; letter-spacing: 0.06em;
+        color: #f6ead6; text-shadow: 0 0 14px rgba(255, 196, 120, 0.55), 0 2px 6px rgba(0, 0, 0, 0.9);
+      }
+      #title { position: absolute; left: 0; right: 0; top: 96px; text-align: center; pointer-events: none; }
+      #title .t1 {
+        display: block; font-size: 128px; font-weight: 900; letter-spacing: 0.14em; color: #ffe6ad;
+        text-shadow: 0 0 24px rgba(255, 190, 80, 0.9), 0 0 70px rgba(255, 140, 40, 0.6);
+      }
+      #title .t2 {
+        display: block; margin-top: 10px; font-size: 34px; font-weight: 700; letter-spacing: 0.3em; color: #f6ead6;
+        text-shadow: 0 0 14px rgba(255, 196, 120, 0.6);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="32" data-width="1920" data-height="1080">
+      <canvas id="light" width="1920" height="1080" class="clip" data-start="0" data-duration="32" data-track-index="0"></canvas>
+
+      <div id="sub-01" class="sub clip" data-start="1.3" data-duration="2.6" data-track-index="1"><span>Loguetown, East Blue</span></div>
+      <div id="sub-02" class="sub clip" data-start="4.0" data-duration="2.6" data-track-index="1"><span>Gol D. Roger — King of the Pirates</span></div>
+      <div id="sub-03" class="sub clip" data-start="6.7" data-duration="1.25" data-track-index="1"><span>Wealth. Fame. Power. He had it all.</span></div>
+      <div id="sub-04" class="sub clip" data-start="8.35" data-duration="1.95" data-track-index="1"><span>“My treasure? Go find it. I left everything in that place.”</span></div>
+      <div id="sub-05" class="sub clip" data-start="10.4" data-duration="2.3" data-track-index="1"><span>And so began the Great Pirate Era.</span></div>
+      <div id="sub-06" class="sub clip" data-start="12.8" data-duration="2.6" data-track-index="1"><span>Pirates set sail for the Grand Line…</span></div>
+      <div id="sub-07" class="sub clip" data-start="15.5" data-duration="2.1" data-track-index="1"><span>…but no one knows where the treasure lies.</span></div>
+      <div id="sub-08" class="sub clip" data-start="18.0" data-duration="2.0" data-track-index="1"><span>The Red Line and the Grand Line split the world.</span></div>
+      <div id="sub-09" class="sub clip" data-start="20.05" data-duration="1.95" data-track-index="1"><span>Four Road Poneglyphs hide the way.</span></div>
+      <div id="sub-10" class="sub clip" data-start="22.1" data-duration="1.9" data-track-index="1"><span>Where their paths cross…</span></div>
+      <div id="sub-11" class="sub clip" data-start="24.1" data-duration="1.9" data-track-index="1"><span>…lies the final island: Laugh Tale.</span></div>
+      <div id="sub-12" class="sub clip" data-start="26.1" data-duration="1.8" data-track-index="1"><span>Everything the world has to offer.</span></div>
+
+      <div id="title" class="clip" data-start="28.0" data-duration="4.0" data-track-index="2">
+        <span class="t1">ONE PIECE</span>
+        <span class="t2">WAITING AT LAUGH TALE</span>
+      </div>
+
+      <audio id="music" src="assets/music.wav" data-start="0" data-duration="32" data-track-index="3" data-volume="1"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+
+      // light painting: a seekable proxy drives the deterministic canvas renderer
+      LightScene.init(document.getElementById("light"));
+      const clock = { t: 0 };
+      tl.to(clock, { t: 32, duration: 32, ease: "none", onUpdate: () => LightScene.render(clock.t) }, 0);
+
+      // subtitles: soft rise in, fade out before the clip ends
+      document.querySelectorAll(".sub").forEach((el) => {
+        const s = parseFloat(el.dataset.start), d = parseFloat(el.dataset.duration), span = el.firstElementChild;
+        tl.fromTo(span, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, s);
+        tl.to(span, { opacity: 0, y: -4, duration: 0.3, ease: "power1.in" }, s + d - 0.3);
+      });
+
+      // final title
+      tl.fromTo("#title .t1", { opacity: 0, scale: 1.18 }, { opacity: 1, scale: 1, duration: 1.1, ease: "expo.out" }, 28.0);
+      tl.fromTo("#title .t2", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.8, ease: "sine.out" }, 28.7);
+
+      LightScene.render(0);
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
