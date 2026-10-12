@@ -123,6 +123,16 @@ h2 em{font-style:normal;color:var(--lime)}
 .item:hover .play{transform:scale(1.12)}
 .frame{position:relative}
 
+/* localization before/after */
+.loc{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;max-width:760px;margin:0 auto}
+@media (max-width:640px){.loc{grid-template-columns:1fr 1fr;gap:12px}.loc .arrow{display:none}}
+.loc .phone{width:100%}
+.loc .arrow{font-family:"Anton",sans-serif;font-size:2.4rem;color:var(--hot)}
+.loc figcaption{margin-top:14px;text-align:center}
+.loc figcaption p{font-size:.88rem;color:var(--dim);line-height:1.4;margin-top:6px}
+.tag.loc-en{background:rgba(168,163,184,.16);color:#CFCBDC}
+.note{margin-top:22px;text-align:center;font-size:.88rem;color:var(--dim)}
+
 /* services */
 .svc{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 @media (max-width:860px){.svc{grid-template-columns:1fr}}
@@ -212,6 +222,24 @@ dialog::backdrop{background:rgba(5,4,10,.88);backdrop-filter:blur(8px)}
     <div class="grid" id="grid"></div>
   </section>
 
+  <section class="wrap" id="localization">
+    <div class="sec-head rv">
+      <div><h2 class="display">AI <em>localization</em></h2><p class="sub">The same ad, rebuilt for a new market: English voiceover and captions swapped for German, with the visuals and timing kept intact.</p></div>
+    </div>
+    <div class="loc rv">
+      <figure>
+        <div class="phone"><div class="scr"><video id="locA" src="videos/localization-en-before.mp4" poster="posters/localization-en-before.jpg" controls playsinline preload="none"></video></div></div>
+        <figcaption><span class="tag loc-en">Before · English</span><p>Original ad · 1:49</p></figcaption>
+      </figure>
+      <div class="arrow" aria-hidden="true">→</div>
+      <figure>
+        <div class="phone"><div class="scr"><video id="locB" src="videos/localization-de-after.mp4" poster="posters/localization-de-after.jpg" controls playsinline preload="none"></video></div></div>
+        <figcaption><span class="tag">After · German</span><p>AI-localized version · 2:44</p></figcaption>
+      </figure>
+    </div>
+    <p class="note rv">Client sample. The product and brand name are blurred out for confidentiality.</p>
+  </section>
+
   <section class="wrap">
     <div class="sec-head rv"><h2 class="display">What I <em>make</em></h2></div>
     <div class="svc">
@@ -295,6 +323,11 @@ document.querySelectorAll(".filters button").forEach(b => b.addEventListener("cl
   const f = b.dataset.f;
   document.querySelectorAll(".item").forEach(it => it.classList.toggle("hide", f !== "all" && !it.dataset.f.split(" ").includes(f)));
 }));
+
+/* localization: only one of the pair plays at a time */
+const locA = document.getElementById("locA"), locB = document.getElementById("locB");
+locA.addEventListener("play", () => locB.pause());
+locB.addEventListener("play", () => locA.pause());
 
 /* lightbox with sound */
 const lb = document.getElementById("lb"), lbv = document.getElementById("lbv"), lbt = document.getElementById("lbt");
