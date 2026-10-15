@@ -1,0 +1,73 @@
+{
+  "title": "Zooted Cyber Stix - Granddaddy Purple Halloween",
+  "aspect_ratio": "9:16",
+  "style": "Stylized 3D animated feature-film look (Pixar / Illumination style), cartoony exaggerated proportions, soft subsurface skin, rich cinematic lighting, deep shadows, moody haunted-house atmosphere, warm firelight with purple accents, volumetric haze, shallow depth of field, vertical 9:16 composition.",
+  "character": "GRANDDADDY PURPLE: a charming stylized 3D cartoon elderly gentleman, tall and lanky, big bushy snow-white beard and dramatic white eyebrows, twinkling mischievous eyes, round gold spectacles, deep plum-purple velvet three-piece suit with gold buttons and a lavender pocket square, white shirt cuffs with gold cufflinks, purple fedora with a gold band, black cane with a polished gold knob, and on his right ring finger a chunky gold signet ring whose square face is a black enamel tile showing the white 'Zo' logo exactly like the reference logo (small '01' on top, big 'Zo', 'zooted' and '4.20' below). Cool, smooth, old-school OG swagger.",
+  "voice": "a deep, smooth, slightly raspy elderly man's voice with cool laid-back swagger",
+  "negative_prompt": "subtitles, captions, on-screen text, watermark, background music, photorealistic live action, extra fingers, deformed hands, distorted logo",
+
+  "keyframes": {
+    "character": {
+      "refs": ["assets/logo.jpg"],
+      "prompt": "Character turnaround sheet on a plain dark-purple background: {character} Show a full-body front view, a three-quarter view, and a large close-up inset of his right hand wearing the gold signet ring with the Zo logo tile facing camera. {style}"
+    },
+    "mansion": {
+      "refs": [],
+      "prompt": "Night. A big old gothic mansion on a hill, huge full moon behind it, glowing jack-o'-lanterns on the front steps, twisted bare trees, a lightning bolt in the purple-black sky. Wide establishing shot. {style}"
+    },
+    "parlor": {
+      "refs": ["keyframes/character.png"],
+      "prompt": "Inside a dusty old mansion parlor at night, locked-off front-facing composition centered on a stone fireplace with a crackling fire. Above the fireplace hangs a large ornate gold-framed oil portrait of Granddaddy Purple (the character in the reference, seated, regal, painted in classic oil-painting style). The mantel is cluttered with cobwebbed candelabras and lit candles. Cobwebs, dust in the air, an armchair at the side. {style}"
+    },
+    "s3_start": {
+      "refs": ["keyframes/character.png", "keyframes/parlor.png"],
+      "prompt": "The same parlor and fireplace as the reference. Granddaddy Purple (the reference character, now a living 3D cartoon) is stepping one foot out of the large gold portrait frame above the fireplace, onto the mantel, dust puffing off him, the painting canvas behind him rippling. {character} {style}"
+    },
+    "s4_start": {
+      "refs": ["keyframes/character.png", "keyframes/parlor.png"],
+      "prompt": "The same mansion parlor. Granddaddy Purple walks toward camera with his gold-knob cane past a row of candles; the candles nearest him have purple flames, the ones ahead still have normal orange flames. In the background a cartoon skeleton and a cartoon vampire, both wearing hats, sit at a small card table holding playing cards. {character} {style}"
+    },
+    "s5_start": {
+      "refs": ["keyframes/character.png", "keyframes/parlor.png", "assets/device.png"],
+      "prompt": "Granddaddy Purple seated in a big tufted brown leather armchair beside the fireplace in the same parlor, holding up the purple 'Cyber Stix' vape device from the reference (exact shape, purple body, gold oil window, vertical 'GRANDDADDY PURPLE' stripe, small Zo tile) in his right hand; the gold signet ring with the Zo logo and the device are both clearly in frame, the gold oil glowing in the firelight. Medium close-up. {character} {style}"
+    },
+    "s6_start": {
+      "refs": ["keyframes/character.png", "assets/device.png"],
+      "prompt": "Close-up of Granddaddy Purple in the leather armchair by the fire, lips on the purple Cyber Stix device from the reference, about to take a pull, eyes half-closed and relaxed, ring with Zo logo visible on his hand. {character} {style}"
+    },
+    "s7_start": {
+      "refs": ["keyframes/character.png", "keyframes/parlor.png"],
+      "prompt": "Granddaddy Purple sitting in the big leather armchair by the fireplace, a thick swirling purple cloud rolling through the parlor around him, he is leaning back relaxed. Medium-wide shot. {character} {style}"
+    },
+    "s7_end": {
+      "refs": ["keyframes/s7_start.png"],
+      "prompt": "Exactly the same shot, same camera, same armchair and parlor as the reference, but the armchair is now EMPTY - Granddaddy Purple has vanished; only wisps of purple smoke drift over the empty seat. {style}"
+    },
+    "s8_endcard": {
+      "refs": ["keyframes/parlor.png", "assets/box.png", "assets/device.png"],
+      "prompt": "EXACTLY the same parlor, same camera angle and composition as the first reference image, with these changes only: the large gold portrait frame above the fireplace is now completely EMPTY (bare dark canvas, no person, no painting); on the fireplace mantel stand the Zooted Cyber Stix retail box and the purple vape device from the references (reproduce their exact design and colors), next to a carved jack-o'-lantern glowing purple. Faint purple haze clearing. Leave the lower third of the frame darker and uncluttered for text. {style}"
+    }
+  },
+
+  "clips": [
+    {"id": "s1", "start": "mansion", "gen": 6, "use": 5,
+     "prompt": "Slow push in toward the haunted mansion on the hill, full moon behind it, jack-o'-lanterns flickering on the steps, a bright lightning flash lights up the sky followed by rolling thunder. Wind and crickets. No dialogue."},
+    {"id": "s2", "start": "parlor", "gen": 6, "use": 5,
+     "prompt": "Slow steady push in on the oil portrait of Granddaddy Purple above the fireplace. Candles flicker, fire crackles, dust floats. At the end, the painted eyes in the portrait slowly shift and look directly at the camera. Creepy creak sound. No dialogue."},
+    {"id": "s3", "start": "s3_start", "gen": 6, "use": 6,
+     "prompt": "Granddaddy Purple steps out of the portrait frame and down onto the parlor floor, brushes dust off his shoulder and fixes his cuffs, then a quick close-up on his hand as he straightens his gold signet ring, the Zo logo facing camera. He looks at camera and says in {voice}: \"You thought I was gone?\""},
+    {"id": "s4", "start": "s4_start", "gen": 8, "use": 7,
+     "prompt": "Tracking shot: Granddaddy Purple strolls through the parlor with his cane. As he walks past each candle, its flame flickers and turns purple. A cartoon skeleton and a cartoon vampire playing cards at a table stop and tip their hats to him. He says in {voice}: \"Nah. I been right here the whole time.\""},
+    {"id": "s5", "start": "s5_start", "gen": 8, "use": 7,
+     "prompt": "Granddaddy Purple settles into the big leather chair by the fire, reaches into his jacket and pulls out the purple Cyber Stix device; camera pushes into a close-up of the device in his hand with the Zo ring also in frame, the gold oil catching the firelight. He says in {voice}: \"Granddaddy's back. Got a new look, too.\""},
+    {"id": "s6", "start": "s6_start", "gen": 6, "use": 6,
+     "prompt": "Granddaddy Purple takes a slow pull from the device, then leans toward the camera and blows a thick billowing purple cloud straight at the lens until the cloud completely fills the frame. His mouth is busy exhaling, he does NOT speak on camera. Off-screen voiceover in {voice}: \"Two grams. Live resin. No post.\""},
+    {"id": "s7", "start": "s7_start", "end": "s7_end", "gen": 6, "use": 5,
+     "prompt": "The purple cloud rolls through the room. Granddaddy Purple leans back in the leather chair, gives a small cool nod to the camera and says in {voice}: \"Happy Halloween.\" Then he dissolves completely into the purple smoke, leaving the chair empty."}
+  ],
+
+  "endcard": {
+    "image": "s8_endcard", "seconds": 5,
+    "lines": ["ZOOTED CYBER STIX", "GRANDDADDY PURPLE", "2G LIVE RESIN DISPOSABLE", "21+"]
+  }
+}
