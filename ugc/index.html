@@ -231,6 +231,7 @@ dialog::backdrop{background:rgba(5,4,10,.88);backdrop-filter:blur(8px)}
       <div class="filters" role="group" aria-label="Filter videos">
         <button type="button" data-f="all" aria-pressed="true">All</button>
         <button type="button" data-f="local" aria-pressed="false">Client work</button>
+        <button type="button" data-f="avatar" aria-pressed="false">AI avatar</button>
         <button type="button" data-f="spec" aria-pressed="false">Spec ads</button>
         <button type="button" data-f="motion" aria-pressed="false">Motion</button>
       </div>
@@ -303,6 +304,7 @@ dialog::backdrop{background:rgba(5,4,10,.88);backdrop-filter:blur(8px)}
 <script>
 /* Add a video: copy one line, drop the file in videos/ and its poster in posters/. */
 const WORK = [
+  { id: "spec-duvela-avatar-es", title: "Duvela · magnesium gummies (Spain)", tag: "Spec ad", cls: "spec", f: "spec avatar", desc: "AI avatar ad in Castilian Spanish: HeyGen Avatar 6 lip-sync, ElevenLabs Spain-Spanish voice, Nano Banana presenter, word-timed captions, product cutaway and CTA · 24s" },
   { id: "pest-control-test-ad", title: "Pest control brand · \"It's the wall\"", tag: "Test ad", cls: "spec", f: "spec", desc: "Norwegian Meta ad test: client footage and voiceover, plus my own Google Flow scenes, tracked motion graphics and ElevenLabs sound. Product blurred · 45s" },
   { id: "german-supplement-scientist-cartoon", title: "Supplement brand · \"The garlic scientist\"", tag: "Client work", cls: "", f: "local", desc: "Long-form German ad told as a Japanese-style cartoon story, with German voiceover and captions. Brand blurred · 4:00" },
   { id: "german-supplement-retro-artery", title: "Supplement brand · retro cartoon artery", tag: "Client work", cls: "", f: "local", desc: "German ad hosted by a 1930s rubber-hose-style cartoon artery, with German voiceover and captions. Brand blurred · 3:36" },
@@ -311,7 +313,7 @@ const WORK = [
   { id: "german-supplement-claymation", title: "Supplement brand · men's health claymation", tag: "Client work", cls: "", f: "local", desc: "German ad in a claymation style with 3D anatomy scenes, German voiceover and captions. Brand blurred · 2:14" },
   { id: "spec-brightday", title: "Brightday · membership app", tag: "Spec ad", cls: "spec", f: "spec", desc: "AI story ad: one consistent character across six Google Flow scenes, ElevenLabs voiceover and music, word-timed captions · 27s" },
   { id: "the-spot-laundry", title: "The Spot Laundry Shop", tag: "Client work", cls: "", f: "local", desc: "Taglish promo for a laundromat in Floridablanca · 47s" },
-  { id: "footwear-ugc", title: "Footwear brand · AI avatar UGC", tag: "Client work", cls: "", f: "local", desc: "HeyGen avatar, product B-roll and captions, edited in Descript · 18s" },
+  { id: "footwear-ugc", title: "Footwear brand · AI avatar UGC", tag: "Client work", cls: "", f: "local avatar", desc: "HeyGen avatar, product B-roll and captions, edited in Descript · 18s" },
   { id: "skincare-gua-sha-ugc", title: "Skincare brand · \"My jaw at 40\"", tag: "Client work", cls: "", f: "local", desc: "French UGC ad recreated from the client's reference video, with kinetic captions, B-roll and end card. Product blurred · 37s" },
   { id: "skincare-stick-test-ugc", title: "Skincare brand · \"Do this test\"", tag: "Client work", cls: "", f: "local", desc: "French in-car UGC ad recreated from the client's reference video, with a 3-second test hook and B-roll. Product blurred · 37s" },
   { id: "tftg-milk-tea", title: "Tastes from the Greens · milk tea", tag: "Client work", cls: "", f: "local motion", desc: "Animated explainer with kinetic captions for a milk tea shop in Floridablanca · 59s", sq: true },
@@ -348,6 +350,10 @@ document.querySelectorAll(".filters button").forEach(b => b.addEventListener("cl
   const f = b.dataset.f;
   document.querySelectorAll(".item").forEach(it => it.classList.toggle("hide", f !== "all" && !it.dataset.f.split(" ").includes(f)));
 }));
+
+/* deep link: ugc/#avatar (or #spec, #local, #motion) opens the grid already filtered */
+const deep = document.querySelector(`.filters button[data-f="${location.hash.slice(1)}"]`);
+if (deep) { deep.click(); document.getElementById("work").scrollIntoView(); }
 
 /* localization: only one of the pair plays at a time */
 const locA = document.getElementById("locA"), locB = document.getElementById("locB");
